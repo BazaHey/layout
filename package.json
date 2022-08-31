@@ -1,0 +1,72 @@
+{
+  "name": "@thtf/layout",
+  "version": "0.0.1",
+  "description": "一个基于 vue 的布局组件。",
+  "main": "dist/index.umd.min.js",
+  "keywords": [
+    "vue",
+    "layout",
+    "element-ui"
+  ],
+  "author": "thtf",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "http",
+    "url": "git@github.com:thtfjs/layout.git"
+  },
+  "scripts": {
+    "commit": "cz",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build --target lib --name @thtf/layout --dest dist --filename index src/components/index.vue",
+    "lint": "vue-cli-service lint --fix",
+    "lint-staged": "lint-staged",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "src/**/*.{js,vue}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "core-js": "^3.19.1",
+    "vue": "^2.6.14"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@commitlint/cli": "^16.2.3",
+    "@commitlint/config-conventional": "^16.2.1",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "@vue/eslint-config-standard": "^6.1.0",
+    "commitizen": "^4.2.4",
+    "compression-webpack-plugin": "^9.2.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "element-ui": "^2.15.8",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "husky": "^7.0.4",
+    "lint-staged": "^11.2.6",
+    "prettier": "^2.4.1",
+    "sass": "^1.52.3",
+    "sass-loader": "^13.0.0",
+    "vue-template-compiler": "^2.6.14"
+  },
+  "peerDependencies": {
+    "element-ui": "^2.15.8"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
