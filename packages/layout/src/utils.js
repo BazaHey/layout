@@ -1,4 +1,4 @@
-import Layout from './Layout';
+import Layout from './index';
 import ParentView from './ParentView';
 import InnerLink from './InnerLink';
 
