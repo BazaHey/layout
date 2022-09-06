@@ -14,13 +14,13 @@ export default {
   render() {
     const { cachedViews } = this.tagsView;
     const key = this.$route.path;
-    const defaultSlot = this.app.$slots.default;
+    // const defaultSlot = this.app.$slots.default;
 
     return (
       <section class="app-main">
         <transition name="fade-transform" mode="out-in">
-          <keep-alive include={cachedViews} key={key}>
-            {defaultSlot}
+          <keep-alive include={cachedViews}>
+            <router-view key={key} />
           </keep-alive>
         </transition>
         <iframe-toggle />
