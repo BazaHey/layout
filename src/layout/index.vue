@@ -1,5 +1,5 @@
 <template>
-  <pro-layout :logoTitle="logoTitle" :menuRoutes="menuRoutes" :settings="settings">
+  <pro-layout :logoTitle="logoTitle" :menuRoutes="menuRoutes" :settings="settings" @changeSetting="handleSetting">
     <template v-slot:logo>
       <img
         src="https://ts1.cn.mm.bing.net/th/id/R-C.7db570f253315dc3d1a480b2d17ad1ed?rik=08rgwATqX5kw6w&riu=http%3a%2f%2fdzyl.xiangshenghang.com%2fuserfiles%2fimage%2ffilm_festival%2f20120117%2fpic%2fs%2f06.jpg&ehk=zx%2fJsIb83EhUbyBeDmpoo%2fw3kvSCpxfV%2fBZyKoH3B9A%3d&risl=&pid=ImgRaw&r=0"
@@ -85,6 +85,13 @@ export default {
       },
     },
   },
+  methods: {
+    handleSetting(obj) {
+      const { key, value } = obj;
+      this.settings[key] = value;
+    },
+  },
+
   mounted() {
     // 注册路由
     const rewriteRoutes = filterAsyncRouter(mockData, false, true);

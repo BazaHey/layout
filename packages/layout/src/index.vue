@@ -26,7 +26,7 @@
         <tags-view v-if="needTagsView" />
       </div>
       <app-main :tagsView="tagsView" />
-      <right-panel :showSettings="settings.showSettings" @changeSetting="handleSetting">
+      <right-panel :showSettings="showSettings" @changeSetting="handleSetting">
         <settings
           :theme="theme"
           :sideTheme="sideTheme"
@@ -204,8 +204,7 @@ export default {
     },
     // 配置相关方法
     handleSetting(obj) {
-      const { key, value } = obj;
-      this[key] = value;
+      this.$emit('changeSetting', obj);
     },
 
     handleClickOutside() {
