@@ -1,110 +1,53 @@
 <template>
   <el-drawer size="280px" :visible="showSettings" :with-header="false" :append-to-body="true" :show-close="false">
     <div class="drawer-container">
-      <div>
-        <div class="setting-drawer-content">
-          <div class="setting-drawer-title">
-            <h3 class="drawer-title">主题风格设置</h3>
-          </div>
-          <div class="setting-drawer-block-checbox">
-            <div class="setting-drawer-block-checbox-item" @click="handleSideTheme('theme-dark')">
-              <img src="./dark.svg" alt="dark" />
-              <div
-                v-if="sideTheme === 'theme-dark'"
-                class="setting-drawer-block-checbox-selectIcon"
-                style="display: block"
-              >
-                <i aria-label="图标: check" class="anticon anticon-check">
-                  <svg
-                    viewBox="64 64 896 896"
-                    data-icon="check"
-                    width="1em"
-                    height="1em"
-                    :fill="theme"
-                    aria-hidden="true"
-                    focusable="false"
-                    class=""
-                  >
-                    <path
-                      d="M912 190h-69.9c-9.8 0-19.1 4.5-25.1 12.2L404.7 724.5 207 474a32 32 0 0 0-25.1-12.2H112c-6.7 0-10.4 7.7-6.3 12.9l273.9 347c12.8 16.2 37.4 16.2 50.3 0l488.4-618.9c4.1-5.1.4-12.8-6.3-12.8z"
-                    />
-                  </svg>
-                </i>
-              </div>
-            </div>
-            <div class="setting-drawer-block-checbox-item" @click="handleSideTheme('theme-light')">
-              <img src="./light.svg" alt="light" />
-              <div
-                v-if="sideTheme === 'theme-light'"
-                class="setting-drawer-block-checbox-selectIcon"
-                style="display: block"
-              >
-                <i aria-label="图标: check" class="anticon anticon-check">
-                  <svg
-                    viewBox="64 64 896 896"
-                    data-icon="check"
-                    width="1em"
-                    height="1em"
-                    :fill="theme"
-                    aria-hidden="true"
-                    focusable="false"
-                    class=""
-                  >
-                    <path
-                      d="M912 190h-69.9c-9.8 0-19.1 4.5-25.1 12.2L404.7 724.5 207 474a32 32 0 0 0-25.1-12.2H112c-6.7 0-10.4 7.7-6.3 12.9l273.9 347c12.8 16.2 37.4 16.2 50.3 0l488.4-618.9c4.1-5.1.4-12.8-6.3-12.8z"
-                    />
-                  </svg>
-                </i>
-              </div>
-            </div>
-          </div>
-
-          <div class="drawer-item">
-            <span>主题颜色</span>
-            <theme-picker
-              :defaultTheme="theme"
-              style="float: right; height: 26px; margin: -3px 8px 0 0"
-              @change="handleTheme"
-            />
-          </div>
-        </div>
-
-        <el-divider />
-
-        <h3 class="drawer-title">系统布局配置</h3>
-
-        <div class="drawer-item">
-          <span>开启 TopNav</span>
-          <el-switch :value="topNav" @change="handleTopNav" class="drawer-switch" />
-        </div>
-
-        <div class="drawer-item">
-          <span>开启 Tags-Views</span>
-          <el-switch :value="tagsView" @change="handleTagsView" class="drawer-switch" />
-        </div>
-
-        <div class="drawer-item">
-          <span>固定 Header</span>
-          <el-switch :value="fixedHeader" @change="handleFixedHeader" class="drawer-switch" />
-        </div>
-
-        <div class="drawer-item">
-          <span>显示 Logo</span>
-          <el-switch :value="sidebarLogo" @change="handleSidebarLogo" class="drawer-switch" />
-        </div>
-
-        <div class="drawer-item">
-          <span>动态标题</span>
-          <el-switch :value="dynamicTitle" @change="handleDynamicTitle" class="drawer-switch" />
-        </div>
-
-        <el-divider />
-
-        <el-button size="small" type="primary" plain icon="el-icon-document-add" @click="saveSetting"
-          >保存配置</el-button
-        >
-        <el-button size="small" plain icon="el-icon-refresh" @click="resetSetting">重置配置</el-button>
+      <h3 class="drawer-title">整体风格设置</h3>
+      <div class="drawer-item">
+        <el-tooltip effect="dark" content="亮色菜单风格" placement="top">
+          <div class="block-checkbox-item block-checkbox-item-light fl" @click="handleSideTheme('theme-light')" />
+        </el-tooltip>
+        <el-tooltip effect="dark" content="暗色菜单风格" placement="top">
+          <div class="block-checkbox-item block-checkbox-item-dark" @click="handleSideTheme('theme-dark')" />
+        </el-tooltip>
       </div>
+
+      <h3 class="drawer-title">主题颜色</h3>
+      <div class="drawer-item">
+        <theme-picker :defaultTheme="theme" @change="handleTheme" />
+      </div>
+
+      <h3 class="drawer-title">导航模式</h3>
+      <el-tooltip effect="dark" content="侧边菜单布局" placement="top">
+        <div class="block-checkbox-item block-checkbox-item-dark fl" @click="handleTopNav(false)" />
+      </el-tooltip>
+      <el-tooltip effect="dark" content="顶部菜单布局" placement="top">
+        <div class="block-checkbox-item block-checkbox-item-top fl" @click="handleTopNav(true)" />
+      </el-tooltip>
+      <el-tooltip effect="dark" content="混合菜单布局" placement="top">
+        <div class="block-checkbox-item block-checkbox-item-mix" />
+      </el-tooltip>
+      <div class="drawer-item">
+        <span>固定 Header</span>
+        <el-switch :value="fixedHeader" @change="handleFixedHeader" class="fr" />
+      </div>
+      <div class="drawer-item">
+        <span>开启 Tags-Views</span>
+        <el-switch :value="tagsView" @change="handleTagsView" class="fr" />
+      </div>
+
+      <h3 class="drawer-title">内容区域</h3>
+      <div class="drawer-item">
+        <span>显示 Logo</span>
+        <el-switch :value="sidebarLogo" @change="handleSidebarLogo" class="fr" />
+      </div>
+      <div class="drawer-item">
+        <span>动态标题</span>
+        <el-switch :value="dynamicTitle" @change="handleDynamicTitle" class="fr" />
+      </div>
+
+      <el-divider />
+      <el-button size="small" type="primary" plain icon="el-icon-document-add" @click="saveSetting">保存配置</el-button>
+      <el-button size="small" plain icon="el-icon-refresh" @click="resetSetting">重置配置</el-button>
     </div>
   </el-drawer>
 </template>
@@ -244,39 +187,6 @@ export default {
     line-height: 22px;
     font-weight: bold;
   }
-
-  .setting-drawer-block-checbox {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-top: 10px;
-    margin-bottom: 20px;
-
-    .setting-drawer-block-checbox-item {
-      position: relative;
-      margin-right: 16px;
-      border-radius: 2px;
-      cursor: pointer;
-
-      img {
-        width: 48px;
-        height: 48px;
-      }
-
-      .setting-drawer-block-checbox-selectIcon {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
-        padding-top: 15px;
-        padding-left: 24px;
-        color: #1890ff;
-        font-weight: 700;
-        font-size: 14px;
-      }
-    }
-  }
 }
 
 .drawer-container {
@@ -298,8 +208,79 @@ export default {
     padding: 12px 0;
   }
 
-  .drawer-switch {
+  .fr {
     float: right;
+  }
+
+  .fl {
+    float: left;
+  }
+}
+
+.block-checkbox-item {
+  position: relative;
+  width: 44px;
+  height: 36px;
+  margin-right: 16px;
+  overflow: hidden;
+  background-color: #f0f2f5;
+  border-radius: 4px;
+  box-shadow: 0 1px 2.5px 0 rgb(0 0 0 / 18%);
+  cursor: pointer;
+
+  &-light:before {
+    background-color: #fff;
+    content: '';
+  }
+  &:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 33%;
+    height: 100%;
+    background-color: #fff;
+    content: '';
+  }
+
+  &-light:after {
+    background-color: #fff;
+  }
+  &:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 25%;
+    background-color: #fff;
+    content: '';
+  }
+
+  &-dark:before,
+  &-side:before {
+    z-index: 1;
+    background-color: #001529;
+    content: '';
+  }
+
+  &-dark:after,
+  &-side:after {
+    background-color: #fff;
+  }
+
+  &-top:before {
+    background-color: transparent;
+    content: '';
+  }
+  &-top:after {
+    background-color: #001529;
+  }
+
+  &-mix:before {
+    background-color: #fff;
+    content: '';
+  }
+  &-mix:after {
+    background-color: #001529;
   }
 }
 </style>

@@ -16,11 +16,11 @@ npm install @thtf/prolayout
 
 ### 属性
 
-| 参数       | 说明      | 类型   | 可选值 | 默认值 |
-| ---------- | --------- | ------ | ------ | ------ |
-| logoTitle  | Logo 文字 | String | -      | -      |
-| menuRoutes | 路由数组  | Array  | -      | -      |
-| settings   | 布局配置  | Object | -      | -      |
+| 参数       | 说明                     | 类型   | 可选值 | 默认值 |
+| ---------- | ------------------------ | ------ | ------ | ------ |
+| logoTitle  | layout 的左上角 的 title | String | -      | -      |
+| menuRoutes | 路由数组                 | Array  | -      | -      |
+| settings   | 布局配置                 | Object | -      | -      |
 
 ### menuRoutes
 
@@ -45,5 +45,5 @@ npm install @thtf/prolayout
 
 | 名称      | 说明                 |
 | --------- | -------------------- |
-| logo      | Logo 图片            |
+| logo      | layout 的左上角 logo            |
 | rightMenu | 导航栏最右侧菜单区域 |
