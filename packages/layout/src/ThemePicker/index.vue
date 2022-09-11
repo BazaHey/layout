@@ -83,7 +83,7 @@ export default {
         style.innerText = this.updateStyle(innerText, originalCluster, themeCluster);
       });
 
-      this.$emit('change', val);
+      this.$emit('change', 'theme', val);
     },
 
     updateStyle(style, oldCluster, newCluster) {

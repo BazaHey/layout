@@ -63,15 +63,21 @@ export default {
       menuRoutes: mockData,
       // 配置
       settings: {
-        title: 'test',
+        showSettings: false, // 显示配置项
+
+        sideTheme: 'theme-dark', // 整体风格设置：亮色菜单风格、暗色菜单风格
         theme: '#409EFF', // 主题色
-        sideTheme: 'theme-dark', // 左侧菜单栏主题色
-        showSettings: false,
-        topNav: false,
-        tagsView: false,
-        fixedHeader: false,
-        sidebarLogo: true,
-        dynamicTitle: true,
+
+        navMode: '', // 导航模式：侧边菜单布局、顶部菜单布局、混合菜单布局
+        fixedHeader: false, // 固定Header
+        fixedSide: false, // 固定侧边菜单
+        autoMenu: false, // 自动分割菜单
+
+        showHeader: true, // 显示顶栏
+        showSide: true, // 显示菜单，即显示侧边菜单
+        showLogo: true, // 显示Logo
+
+        showTagsView: false, // 显示页签
       },
     };
   },

@@ -1,48 +1,53 @@
 <template>
-  <el-drawer size="280px" :visible="showSettings" :with-header="false" :append-to-body="true" :show-close="false">
+  <el-drawer
+    size="280px"
+    :visible="settings.showSettings"
+    :with-header="false"
+    :append-to-body="true"
+    :show-close="false"
+  >
     <div class="drawer-container">
       <h3 class="drawer-title">整体风格设置</h3>
       <div class="drawer-item">
         <el-tooltip effect="dark" content="亮色菜单风格" placement="top">
-          <div class="block-checkbox-item block-checkbox-item-light fl" @click="handleSideTheme('theme-light')" />
+          <div
+            class="block-checkbox-item block-checkbox-item-light fl"
+            @click="handleSetting('sideTheme', 'theme-light')"
+          />
         </el-tooltip>
         <el-tooltip effect="dark" content="暗色菜单风格" placement="top">
-          <div class="block-checkbox-item block-checkbox-item-dark" @click="handleSideTheme('theme-dark')" />
+          <div class="block-checkbox-item block-checkbox-item-dark" @click="handleSetting('sideTheme', 'theme-dark')" />
         </el-tooltip>
       </div>
 
       <h3 class="drawer-title">主题颜色</h3>
       <div class="drawer-item">
-        <theme-picker :defaultTheme="theme" @change="handleTheme" />
+        <theme-picker :defaultTheme="settings.theme" @change="handleSetting" />
       </div>
 
       <h3 class="drawer-title">导航模式</h3>
       <el-tooltip effect="dark" content="侧边菜单布局" placement="top">
-        <div class="block-checkbox-item block-checkbox-item-dark fl" @click="handleTopNav(false)" />
+        <div class="block-checkbox-item block-checkbox-item-dark fl" @click="handleSetting('navMode', 'side')" />
       </el-tooltip>
       <el-tooltip effect="dark" content="顶部菜单布局" placement="top">
-        <div class="block-checkbox-item block-checkbox-item-top fl" @click="handleTopNav(true)" />
+        <div class="block-checkbox-item block-checkbox-item-top fl" @click="handleSetting('navMode', 'top')" />
       </el-tooltip>
       <el-tooltip effect="dark" content="混合菜单布局" placement="top">
-        <div class="block-checkbox-item block-checkbox-item-mix" />
+        <div class="block-checkbox-item block-checkbox-item-mix" @click="handleSetting('navMode', 'mix')" />
       </el-tooltip>
       <div class="drawer-item">
         <span>固定 Header</span>
-        <el-switch :value="fixedHeader" @change="handleFixedHeader" class="fr" />
-      </div>
-      <div class="drawer-item">
-        <span>开启 Tags-Views</span>
-        <el-switch :value="tagsView" @change="handleTagsView" class="fr" />
+        <el-switch :value="settings.fixedHeader" @change="handleFixedHeader" class="fr" />
       </div>
 
       <h3 class="drawer-title">内容区域</h3>
       <div class="drawer-item">
-        <span>显示 Logo</span>
-        <el-switch :value="sidebarLogo" @change="handleSidebarLogo" class="fr" />
+        <span>开启 Tags-Views</span>
+        <el-switch :value="settings.showTagsView" @change="handleShowTagsView" class="fr" />
       </div>
       <div class="drawer-item">
-        <span>动态标题</span>
-        <el-switch :value="dynamicTitle" @change="handleDynamicTitle" class="fr" />
+        <span>显示 Logo</span>
+        <el-switch :value="settings.showLogo" @change="handleShowLogo" class="fr" />
       </div>
 
       <el-divider />
@@ -60,70 +65,25 @@ export default {
   name: 'LayoutSettings',
   components: { ThemePicker },
   props: {
-    showSettings: {
-      type: Boolean,
-      default: false,
-    },
-    theme: {
-      type: String,
-      default: '#409EFF',
-    },
-    sideTheme: {
-      type: String,
-      default: 'theme-dark',
-    },
-    topNav: {
-      type: Boolean,
-      default: false,
-    },
-    tagsView: {
-      type: Boolean,
-      default: false,
-    },
-    fixedHeader: {
-      type: Boolean,
-      default: false,
-    },
-    sidebarLogo: {
-      type: Boolean,
-      default: false,
-    },
-    dynamicTitle: {
-      type: Boolean,
-      default: false,
+    settings: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
     return {};
   },
   methods: {
-    handleTheme(val) {
+    handleSetting(key, value) {
       this.$emit('changeSetting', {
-        key: 'theme',
-        value: val,
+        key,
+        value,
       });
-    },
-    handleSideTheme(val) {
-      this.$emit('changeSetting', {
-        key: 'sideTheme',
-        value: val,
-      });
-    },
-    handleTopNav(val) {
-      this.$emit('changeSetting', {
-        key: 'topNav',
-        value: val,
-      });
-      if (!val) {
+
+      if (key === 'navMode' && (value === 'top' || value === 'mix')) {
         this.$emit('toggleSidebarHide', false);
         this.$emit('resetSidebarRoutes');
       }
-    },
-    handleTagsView(val) {
-      this.$emit('changeSetting', {
-        key: 'needTagsView',
-        value: val,
-      });
     },
     handleFixedHeader(val) {
       this.$emit('changeSetting', {
@@ -131,18 +91,19 @@ export default {
         value: val,
       });
     },
-    handleSidebarLogo(val) {
+    handleShowTagsView(val) {
       this.$emit('changeSetting', {
-        key: 'sidebarLogo',
+        key: 'showTagsView',
         value: val,
       });
     },
-    handleDynamicTitle(val) {
+    handleShowLogo(val) {
       this.$emit('changeSetting', {
-        key: 'dynamicTitle',
+        key: 'showLogo',
         value: val,
       });
     },
+
     saveSetting() {
       const loadingInstance = Loading.service({
         lock: true,
@@ -153,13 +114,13 @@ export default {
       localStorage.setItem(
         'layout-setting',
         `{
-            "topNav":${this.topNav},
-            "tagsView":${this.tagsView},
-            "fixedHeader":${this.fixedHeader},
-            "sidebarLogo":${this.sidebarLogo},
-            "dynamicTitle":${this.dynamicTitle},
-            "sideTheme":"${this.sideTheme}",
-            "theme":"${this.theme}"
+            "topNav":${this.settings.topNav},
+            "tagsView":${this.settings.tagsView},
+            "fixedHeader":${this.settings.fixedHeader},
+            "showLogo":${this.settings.showLogo},
+            "dynamicTitle":${this.settings.dynamicTitle},
+            "sideTheme":"${this.settings.sideTheme}",
+            "theme":"${this.settings.theme}"
           }`,
       );
       setTimeout(loadingInstance.close(), 1000);

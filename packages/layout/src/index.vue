@@ -1,41 +1,34 @@
 <template>
-  <div :class="classObj" class="app-wrapper" :style="{ '--current-color': theme }">
+  <div :class="classObj" class="app-wrapper" :style="{ '--current-color': settings.theme }">
     <div v-if="device === 'mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
     <sidebar
-      v-if="!sidebar.hide"
+      v-if="showSide"
       :device="device"
       :logoTitle="logoTitle"
-      :sidebarLogo="sidebarLogo"
-      :theme="theme"
-      :sideTheme="sideTheme"
+      :showLogo="settings.showLogo"
+      :theme="settings.theme"
+      :sideTheme="settings.sideTheme"
       :sidebarOpened="sidebar.opened"
       :sidebarRoutes="sidebarRoutes"
       class="sidebar-container"
     />
-    <div :class="{ hasTagsView: needTagsView, sidebarHide: sidebar.hide }" class="main-container">
-      <div :class="{ 'fixed-header': fixedHeader }">
+    <div :class="{ hasTagsView: settings.showTagsView, sidebarHide: !showSide || sidebar.hide }" class="main-container">
+      <div v-if="settings.showHeader" :class="{ 'fixed-header': settings.fixedHeader }">
         <navbar
-          :theme="theme"
+          :theme="settings.theme"
           :sidebarOpened="sidebar.opened"
-          :topNav="topNav"
+          :navMode="settings.navMode"
           :topbarRoutes="topbarRoutes"
           @toggleSidebar="toggleSidebar"
           @toggleSidebarHide="toggleSidebarHide"
           @setSidebarRoutes="setSidebarRoutes"
         />
-        <tags-view v-if="needTagsView" />
       </div>
+      <tags-view v-if="settings.showTagsView" />
       <app-main :tagsView="tagsView" />
-      <right-panel :showSettings="showSettings" @changeSetting="handleSetting">
+      <right-panel :showSettings="settings.showSettings" @changeSetting="handleSetting">
         <settings
-          :theme="theme"
-          :sideTheme="sideTheme"
-          :showSettings="showSettings"
-          :topNav="topNav"
-          :tagsView="needTagsView"
-          :fixedHeader="fixedHeader"
-          :sidebarLogo="sidebarLogo"
-          :dynamicTitle="dynamicTitle"
+          :settings="settings"
           @changeSetting="handleSetting"
           @toggleSidebarHide="toggleSidebarHide"
           @setSidebarRoutes="setSidebarRoutes"
@@ -88,15 +81,18 @@ export default {
       type: Object,
       default: () => {
         return {
-          title: 'test',
-          theme: '#409EFF',
-          sideTheme: 'theme-dark',
           showSettings: false,
-          topNav: false,
-          tagsView: false,
-          fixedHeader: false,
-          sidebarLogo: true,
-          dynamicTitle: true,
+          sideTheme: 'theme-dark',
+          navMode: '', // 导航模式：侧边菜单布局、顶部菜单布局、混合菜单布局
+          fixedHeader: false, // 固定Header
+          fixedSide: false, // 固定侧边菜单
+          autoMenu: false, // 自动分割菜单
+
+          showHeader: true, // 显示顶栏
+          showSide: true, // 显示菜单，即显示侧边菜单
+          showLogo: true, // 显示Logo
+
+          showTagsView: false, // 显示页签
         };
       },
     },
@@ -105,15 +101,6 @@ export default {
     return {
       // 设备：桌面(desktop)、移动(mobile)
       device: 'desktop',
-      // 配置项
-      theme: '#409EFF',
-      sideTheme: 'theme-dark',
-      showSettings: false,
-      topNav: false,
-      fixedHeader: false,
-      sidebarLogo: true,
-      dynamicTitle: false,
-      needTagsView: false,
       // 侧边栏
       sidebar: {
         hide: false,
@@ -143,26 +130,27 @@ export default {
     variables() {
       return variables;
     },
+    showSide() {
+      if (this.settings.showSide === false) {
+        return false;
+      }
+
+      if (this.settings.navMode === 'top') {
+        return false;
+      }
+
+      if (this.sidebar.hide) {
+        return false;
+      }
+
+      return true;
+    },
   },
   watch: {
     $route(route) {
       if (this.device === 'mobile' && this.sidebar.opened) {
         this.closeSidebar({ withoutAnimation: false });
       }
-    },
-    settings: {
-      handler(val) {
-        const { theme, sideTheme, showSettings, topNav, tagsView, fixedHeader, sidebarLogo, dynamicTitle } = val;
-        this.theme = theme;
-        this.sideTheme = sideTheme;
-        this.showSettings = showSettings;
-        this.topNav = topNav;
-        this.needTagsView = tagsView;
-        this.fixedHeader = fixedHeader;
-        this.sidebarLogo = sidebarLogo;
-        this.dynamicTitle = dynamicTitle;
-      },
-      deep: true,
     },
     menuRoutes: {
       handler(val) {

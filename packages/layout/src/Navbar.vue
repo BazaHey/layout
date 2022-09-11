@@ -16,9 +16,9 @@ export default {
       type: Boolean,
       default: true,
     },
-    topNav: {
-      type: Boolean,
-      default: true,
+    navMode: {
+      type: String,
+      default: 'mix',
     },
     topbarRoutes: {
       type: Array,
@@ -37,7 +37,7 @@ export default {
     },
   },
   render() {
-    const { sidebarOpened, theme, topNav, topbarRoutes } = this;
+    const { sidebarOpened, theme, navMode, topbarRoutes } = this;
     const rightMenu = this.app.$slots.rightMenu;
 
     return (
@@ -49,7 +49,7 @@ export default {
           vOn:toggleClick={this.toggleSidebar}
         />
 
-        {topNav ? (
+        {navMode === 'top' || navMode === 'mix' ? (
           <top-nav
             theme={theme}
             topbarRoutes={topbarRoutes}

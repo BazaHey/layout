@@ -46,7 +46,7 @@ export default {
       type: String,
       default: '',
     },
-    sidebarLogo: {
+    showLogo: {
       type: Boolean,
       default: true,
     },
@@ -76,9 +76,6 @@ export default {
         return meta.activeMenu;
       }
       return path;
-    },
-    showLogo() {
-      return this.sidebarLogo;
     },
     variables() {
       return variables;
