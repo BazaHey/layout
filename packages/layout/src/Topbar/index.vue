@@ -5,20 +5,19 @@
       backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground,
     }"
   >
-    <logo v-if="showLogo" :logoTitle="logoTitle" :collapse="isCollapse" :sideTheme="sideTheme" />
-    <el-scrollbar :class="sideTheme" wrap-class="scrollbar-wrapper__y">
+    <logo v-if="showLogo" :logoTitle="logoTitle" :sideTheme="sideTheme" />
+    <el-scrollbar :class="sideTheme" wrap-class="scrollbar-wrapper__x">
       <el-menu
         :default-active="activeMenu"
-        :collapse="isCollapse"
         :background-color="sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground"
         :text-color="sideTheme === 'theme-dark' ? variables.menuColor : variables.menuLightColor"
         :unique-opened="true"
         :active-text-color="theme"
         :collapse-transition="false"
-        mode="vertical"
+        mode="horizontal"
       >
-        <sidebar-item
-          v-for="(route, index) in sidebarRoutes"
+        <topbar-item
+          v-for="(route, index) in topbarRoutes"
           :key="route.path + index"
           :item="route"
           :base-path="route.path"
@@ -26,26 +25,17 @@
         />
       </el-menu>
     </el-scrollbar>
-
-    <hamburger
-      id="hamburger-container"
-      :is-active="sidebarOpened"
-      class="hamburger-container"
-      :class="{ 'theme-dark': sideTheme === 'theme-dark' }"
-      @toggleClick="toggleSidebar"
-    />
   </div>
 </template>
 
 <script>
-import Logo from './Logo';
-import SidebarItem from './SidebarItem';
-import Hamburger from '../Hamburger';
+import Logo from '../Sidebar/Logo';
+import TopbarItem from './TopbarItem';
 import variables from '../styles/variables.module.scss';
 
 export default {
-  name: 'SideBar',
-  components: { SidebarItem, Logo, Hamburger },
+  name: 'TopBar',
+  components: { TopbarItem, Logo },
   props: {
     device: {
       type: String,
@@ -57,7 +47,7 @@ export default {
     },
     showLogo: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     theme: {
       type: String,
@@ -67,11 +57,7 @@ export default {
       type: String,
       default: 'theme-dark',
     },
-    sidebarOpened: {
-      type: Boolean,
-      default: true,
-    },
-    sidebarRoutes: {
+    topbarRoutes: {
       type: Array,
       default: () => [],
     },
@@ -89,35 +75,6 @@ export default {
     variables() {
       return variables;
     },
-    isCollapse() {
-      return !this.sidebarOpened;
-    },
-  },
-  methods: {
-    toggleSidebar(value) {
-      this.$emit('toggleSidebar', value);
-    },
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.hamburger-container {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  line-height: 46px;
-  height: 46px;
-  cursor: pointer;
-  transition: background 0.3s;
-  -webkit-tap-highlight-color: transparent;
-
-  &:hover {
-    background: rgba(0, 0, 0, 0.025);
-  }
-}
-
-.hamburger-container.theme-dark {
-  fill: #fff;
-}
-</style>

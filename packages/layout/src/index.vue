@@ -10,6 +10,7 @@
       :sideTheme="settings.sideTheme"
       :sidebarOpened="sidebar.opened"
       :sidebarRoutes="sidebarRoutes"
+      @toggleSidebar="toggleSidebar"
       class="sidebar-container"
     />
     <div :class="{ hasTagsView: settings.showTagsView, sidebarHide: !showSide || sidebar.hide }" class="main-container">
@@ -19,23 +20,22 @@
           :sidebarOpened="sidebar.opened"
           :navMode="settings.navMode"
           :topbarRoutes="topbarRoutes"
-          @toggleSidebar="toggleSidebar"
           @toggleSidebarHide="toggleSidebarHide"
           @setSidebarRoutes="setSidebarRoutes"
         />
       </div>
       <tags-view v-if="settings.showTagsView" />
       <app-main :tagsView="tagsView" />
-      <right-panel :showSettings="settings.showSettings" @changeSetting="handleSetting">
-        <settings
-          :settings="settings"
-          @changeSetting="handleSetting"
-          @toggleSidebarHide="toggleSidebarHide"
-          @setSidebarRoutes="setSidebarRoutes"
-          @resetSidebarRoutes="resetSidebarRoutes"
-        />
-      </right-panel>
     </div>
+    <right-panel :showSettings="settings.showSettings" @changeSetting="handleSetting">
+      <settings
+        :settings="settings"
+        @changeSetting="handleSetting"
+        @toggleSidebarHide="toggleSidebarHide"
+        @setSidebarRoutes="setSidebarRoutes"
+        @resetSidebarRoutes="resetSidebarRoutes"
+      />
+    </right-panel>
   </div>
 </template>
 

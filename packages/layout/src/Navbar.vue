@@ -1,14 +1,12 @@
 <script>
 import Breadcrumb from './Breadcrumb';
 import TopNav from './TopNav';
-import Hamburger from './Hamburger';
 
 export default {
   name: 'NavBar',
   components: {
     Breadcrumb,
     TopNav,
-    Hamburger,
   },
   inject: ['app'],
   props: {
@@ -26,9 +24,6 @@ export default {
     },
   },
   methods: {
-    toggleSidebar() {
-      this.$emit('toggleSidebar');
-    },
     toggleSidebarHide(value) {
       this.$emit('toggleSidebarHide', value);
     },
@@ -37,18 +32,11 @@ export default {
     },
   },
   render() {
-    const { sidebarOpened, theme, navMode, topbarRoutes } = this;
+    const { theme, navMode, topbarRoutes } = this;
     const rightMenu = this.app.$slots.rightMenu;
 
     return (
       <div class="navbar">
-        <hamburger
-          id="hamburger-container"
-          is-active={sidebarOpened}
-          class="hamburger-container"
-          vOn:toggleClick={this.toggleSidebar}
-        />
-
         {navMode === 'top' || navMode === 'mix' ? (
           <top-nav
             mode={navMode}
@@ -78,26 +66,13 @@ export default {
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 
-  .hamburger-container {
-    line-height: 46px;
-    height: 100%;
-    float: left;
-    cursor: pointer;
-    transition: background 0.3s;
-    -webkit-tap-highlight-color: transparent;
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.025);
-    }
-  }
-
   .breadcrumb-container {
     float: left;
   }
 
   .topmenu-container {
     position: absolute;
-    left: 50px;
+    width: 100%;
   }
 
   .errLog-container {

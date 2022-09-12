@@ -1,23 +1,27 @@
 <template>
-  <mix-nav v-if="mode === 'mix'"></mix-nav>
-  <side-bar v-else></side-bar>
+  <mix-nav v-if="mode === 'mix'" opbarRoutes="topbarRoutes"></mix-nav>
+  <top-bar v-else :topbarRoutes="topbarRoutes"></top-bar>
 </template>
 
 <script>
 import MixNav from './MixNav.vue';
-import SideBar from '../Sidebar';
+import TopBar from '../Topbar';
 
 export default {
   name: 'TopNav',
   props: {
-    mode: {
+    navMode: {
       type: String,
-      default: 'top',
+      default: 'mix',
+    },
+    topbarRoutes: {
+      type: Array,
+      default: () => [],
     },
   },
   components: {
     MixNav,
-    SideBar,
+    TopBar,
   },
   data() {
     return {};
