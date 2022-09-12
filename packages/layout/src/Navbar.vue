@@ -51,6 +51,7 @@ export default {
 
         {navMode === 'top' || navMode === 'mix' ? (
           <top-nav
+            mode={navMode}
             theme={theme}
             topbarRoutes={topbarRoutes}
             vOn:toggleSidebarHide={this.toggleSidebarHide}
