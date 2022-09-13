@@ -1,24 +1,30 @@
 <template>
-  <div :class="classObj" class="app-wrapper" :style="{ '--current-color': settings.theme }">
+  <div :class="classObj" class="thtf-pro-basicLayout" :style="{ '--current-color': settings.theme }">
     <div v-if="device === 'mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
     <sidebar
       v-if="showSide"
       :device="device"
       :logoTitle="logoTitle"
-      :showLogo="settings.showLogo"
-      :theme="settings.theme"
       :sideTheme="settings.sideTheme"
+      :theme="settings.theme"
+      :showLogo="settings.showLogo"
       :sidebarOpened="sidebar.opened"
       :sidebarRoutes="sidebarRoutes"
       @toggleSidebar="toggleSidebar"
       class="sidebar-container"
     />
-    <div :class="{ hasTagsView: settings.showTagsView, sidebarHide: !showSide || sidebar.hide }" class="main-container">
+    <div
+      :class="{ hasTagsView: settings.showTagsView, headerHide: !settings.showHeader, sidebarHide: !showSide }"
+      class="main-container"
+    >
       <div v-if="settings.showHeader" :class="{ 'fixed-header': settings.fixedHeader }">
         <navbar
-          :theme="settings.theme"
           :sidebarOpened="sidebar.opened"
+          :sideTheme="settings.sideTheme"
+          :theme="settings.theme"
           :navMode="settings.navMode"
+          :logoTitle="logoTitle"
+          :showLogo="settings.showLogo"
           :topbarRoutes="topbarRoutes"
           @toggleSidebarHide="toggleSidebarHide"
           @setSidebarRoutes="setSidebarRoutes"
@@ -41,17 +47,29 @@
 
 <script>
 import AppMain from './AppMain.vue';
-import Navbar from './Navbar.vue';
+import Navbar from './Navbar/index.vue';
 import Sidebar from './Sidebar';
 import TagsView from './TagsView';
 import RightPanel from './RightPanel';
 import Settings from './Settings';
 import variables from './styles/variables.module.scss';
-import './styles/sidebar.scss';
 import { filterAsyncRouter } from './utils';
+import './styles/sidebar.scss';
 
 const { body } = document;
 const WIDTH = 992; // refer to Bootstrap's responsive design
+// const defaultSettings = {
+//   showSettings: false,
+//   sideTheme: 'theme-dark',
+//   navMode: 'mix', // 导航模式：侧边菜单布局、顶部菜单布局、混合菜单布局
+//   fixedHeader: true, // 固定Header
+//   fixedSide: true, // 固定侧边菜单
+//   autoMenu: true, // 自动分割菜单
+//   showHeader: true, // 显示顶栏
+//   showSide: true, // 显示菜单，即显示侧边菜单
+//   showLogo: true, // 显示Logo
+//   showTagsView: false, // 显示页签
+// };
 
 export default {
   name: 'ProLayout',
@@ -79,22 +97,7 @@ export default {
     },
     settings: {
       type: Object,
-      default: () => {
-        return {
-          showSettings: false,
-          sideTheme: 'theme-dark',
-          navMode: '', // 导航模式：侧边菜单布局、顶部菜单布局、混合菜单布局
-          fixedHeader: false, // 固定Header
-          fixedSide: false, // 固定侧边菜单
-          autoMenu: false, // 自动分割菜单
-
-          showHeader: true, // 显示顶栏
-          showSide: true, // 显示菜单，即显示侧边菜单
-          showLogo: true, // 显示Logo
-
-          showTagsView: false, // 显示页签
-        };
-      },
+      default: () => {},
     },
   },
   data() {
@@ -120,8 +123,13 @@ export default {
   },
   computed: {
     classObj() {
+      const { navMode, fixedSide } = this.settings;
       return {
-        hideSidebar: !this.sidebar.opened,
+        'thtf-pro-basicLayout-side': navMode === 'side',
+        'thtf-pro-basicLayout-top': navMode === 'top',
+        'thtf-pro-basicLayout-mix': navMode === 'mix',
+        'thtf-pro-basicLayout-fix-siderbar': fixedSide,
+        closeSidebar: !this.sidebar.opened,
         openSidebar: this.sidebar.opened,
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile',
@@ -230,51 +238,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-@import './styles/mixin.scss';
-@import './styles/variables.module.scss';
-
-.app-wrapper {
-  @include clearfix;
-  position: relative;
-  height: 100%;
-  width: 100%;
-
-  &.mobile.openSidebar {
-    position: fixed;
-    top: 0;
-  }
-}
-
-.drawer-bg {
-  background: #000;
-  opacity: 0.3;
-  width: 100%;
-  top: 0;
-  height: 100%;
-  position: absolute;
-  z-index: 999;
-}
-
-.fixed-header {
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 9;
-  width: calc(100% - #{$base-sidebar-width});
-  transition: width 0.28s;
-}
-
-.hideSidebar .fixed-header {
-  width: calc(100% - 54px);
-}
-
-.sidebarHide .fixed-header {
-  width: 100%;
-}
-
-.mobile .fixed-header {
-  width: 100%;
-}
-</style>

@@ -1,5 +1,5 @@
 <template>
-  <div>我是页面测试组件</div>
+  <div style="height: 100vh">我是页面测试组件</div>
 </template>
 
 <script>

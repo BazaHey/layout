@@ -39,15 +39,31 @@
         <span>固定 Header</span>
         <el-switch :value="settings.fixedHeader" @change="handleFixedHeader" class="fr" />
       </div>
+      <div class="drawer-item">
+        <span>固定侧边菜单</span>
+        <el-switch :value="settings.fixedSide" @change="handleFixedSide" class="fr" />
+      </div>
+      <div class="drawer-item">
+        <span>自动分割菜单</span>
+        <el-switch :value="settings.autoMenu" @change="handleAutoMenu" class="fr" />
+      </div>
 
       <h3 class="drawer-title">内容区域</h3>
       <div class="drawer-item">
-        <span>开启 Tags-Views</span>
-        <el-switch :value="settings.showTagsView" @change="handleShowTagsView" class="fr" />
+        <span>顶栏</span>
+        <el-switch :value="settings.showHeader" @change="handleShowHeader" class="fr" />
+      </div>
+      <div class="drawer-item">
+        <span>菜单</span>
+        <el-switch :value="settings.showSide" @change="handleShowSide" class="fr" />
       </div>
       <div class="drawer-item">
         <span>显示 Logo</span>
         <el-switch :value="settings.showLogo" @change="handleShowLogo" class="fr" />
+      </div>
+      <div class="drawer-item">
+        <span>显示页签</span>
+        <el-switch :value="settings.showTagsView" @change="handleShowTagsView" class="fr" />
       </div>
 
       <el-divider />
@@ -91,15 +107,39 @@ export default {
         value: val,
       });
     },
-    handleShowTagsView(val) {
+    handleFixedSide(val) {
       this.$emit('changeSetting', {
-        key: 'showTagsView',
+        key: 'fixedSide',
+        value: val,
+      });
+    },
+    handleAutoMenu(val) {
+      this.$emit('changeSetting', {
+        key: 'autoMenu',
+        value: val,
+      });
+    },
+    handleShowHeader(val) {
+      this.$emit('changeSetting', {
+        key: 'showHeader',
+        value: val,
+      });
+    },
+    handleShowSide(val) {
+      this.$emit('changeSetting', {
+        key: 'showSide',
         value: val,
       });
     },
     handleShowLogo(val) {
       this.$emit('changeSetting', {
         key: 'showLogo',
+        value: val,
+      });
+    },
+    handleShowTagsView(val) {
+      this.$emit('changeSetting', {
+        key: 'showTagsView',
         value: val,
       });
     },
@@ -114,13 +154,20 @@ export default {
       localStorage.setItem(
         'layout-setting',
         `{
-            "topNav":${this.settings.topNav},
-            "tagsView":${this.settings.tagsView},
-            "fixedHeader":${this.settings.fixedHeader},
-            "showLogo":${this.settings.showLogo},
-            "dynamicTitle":${this.settings.dynamicTitle},
             "sideTheme":"${this.settings.sideTheme}",
-            "theme":"${this.settings.theme}"
+            "theme":"${this.settings.theme}",
+
+            "navMode":"${this.settings.navMode}",
+
+            "fixedHeader":${this.settings.fixedHeader},
+            "fixedSide":${this.settings.fixedSide},
+            "autoMenu":${this.settings.autoMenu},
+
+            "showHeader":${this.settings.showHeader},
+            "showSide":${this.settings.showSide},
+            "showLogo":${this.settings.showLogo},
+
+            "showTagsView":${this.settings.showTagsView},
           }`,
       );
       setTimeout(loadingInstance.close(), 1000);

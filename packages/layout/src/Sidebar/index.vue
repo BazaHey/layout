@@ -28,7 +28,6 @@
     </el-scrollbar>
 
     <hamburger
-      id="hamburger-container"
       :is-active="sidebarOpened"
       class="hamburger-container"
       :class="{ 'theme-dark': sideTheme === 'theme-dark' }"
@@ -55,17 +54,17 @@ export default {
       type: String,
       default: '',
     },
-    showLogo: {
-      type: Boolean,
-      default: true,
+    sideTheme: {
+      type: String,
+      default: 'theme-dark',
     },
     theme: {
       type: String,
       default: '#409EFF',
     },
-    sideTheme: {
-      type: String,
-      default: 'theme-dark',
+    showLogo: {
+      type: Boolean,
+      default: true,
     },
     sidebarOpened: {
       type: Boolean,
@@ -106,8 +105,8 @@ export default {
   position: absolute;
   left: 0;
   bottom: 0;
-  line-height: 46px;
   height: 46px;
+  line-height: 46px;
   cursor: pointer;
   transition: background 0.3s;
   -webkit-tap-highlight-color: transparent;

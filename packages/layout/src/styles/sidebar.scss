@@ -1,10 +1,37 @@
 @import './variables.module';
 
-.main-container {
-  min-height: 100%;
-  transition: margin-left 0.28s;
-  margin-left: $base-sidebar-width;
+.thtf-pro-basicLayout {
   position: relative;
+  height: 100%;
+  width: 100%;
+
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+
+  &.mobile.openSidebar {
+    position: fixed;
+    top: 0;
+  }
+}
+
+.drawer-bg {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: 0.3;
+  z-index: 999;
+}
+
+.main-container {
+  position: relative;
+  min-height: 100%;
+  margin-left: $base-sidebar-width;
+  transition: margin-left 0.28s;
 }
 
 .sidebarHide {
@@ -12,20 +39,18 @@
 }
 
 .sidebar-container {
-  -webkit-transition: width 0.28s;
-  transition: width 0.28s;
-  width: $base-sidebar-width !important;
-  background-color: $base-menu-background;
-  height: 100%;
   position: fixed;
-  font-size: 0px;
   top: 0;
   bottom: 0;
   left: 0;
-  z-index: 1001;
-  overflow: hidden;
-  -webkit-box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+  width: $base-sidebar-width !important;
+  height: 100%;
+  font-size: 0px;
+  background-color: $base-menu-background;
   box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+  overflow: hidden;
+  transition: width 0.28s;
+  z-index: 1001;
 
   // reset element-ui css
   .horizontal-collapse-transition {
@@ -111,7 +136,28 @@
   }
 }
 
-.hideSidebar {
+.fixed-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 9;
+  width: calc(100% - #{$base-sidebar-width});
+  transition: width 0.28s;
+}
+
+.closeSidebar .fixed-header {
+  width: calc(100% - 54px);
+}
+
+.sidebarHide .fixed-header {
+  width: 100%;
+}
+
+.mobile .fixed-header {
+  width: 100%;
+}
+
+.closeSidebar {
   .sidebar-container {
     width: 54px !important;
   }
@@ -175,7 +221,7 @@
     width: $base-sidebar-width !important;
   }
 
-  &.hideSidebar {
+  &.closeSidebar {
     .sidebar-container {
       pointer-events: none;
       transition-duration: 0.3s;

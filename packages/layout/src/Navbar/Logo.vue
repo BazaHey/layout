@@ -2,37 +2,24 @@
 import variables from '../styles/variables.module.scss';
 
 export default {
-  name: 'SidebarLogo',
+  name: 'NavbarLogo',
   inject: ['app'],
   props: {
     logoTitle: {
       type: String,
       default: '',
     },
-    collapse: {
-      type: Boolean,
-      required: true,
-    },
     sideTheme: {
       type: String,
       default: 'theme-dark',
-    },
-  },
-  computed: {
-    variables() {
-      return variables;
     },
   },
   data() {
     return {};
   },
   render() {
-    const { logoTitle, sideTheme, collapse } = this;
+    const { logoTitle, sideTheme } = this;
 
-    const className = {
-      'sidebar-logo-container': true,
-      collapse,
-    };
     const style = {
       backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground,
     };
@@ -43,26 +30,14 @@ export default {
     const logo = this.app.$slots.logo;
 
     return (
-      <div class={className} style={style}>
-        <transition name="sidebarLogoFade">
-          {collapse ? (
-            <router-link key="collapse" class="sidebar-logo-link" to="/">
-              {logo ? (
-                <span class="sidebar-logo">{logo}</span>
-              ) : (
-                <h1 class="sidebar-title" style={titleStyle}>
-                  {logoTitle}
-                </h1>
-              )}
-            </router-link>
-          ) : (
-            <router-link key="expand" class="sidebar-logo-link" to="/">
-              {logo && <span class="sidebar-logo">{logo}</span>}
-              <h1 class="sidebar-title" style={titleStyle}>
-                {logoTitle}
-              </h1>
-            </router-link>
-          )}
+      <div class="navbar-logo-container" style={style}>
+        <transition name="navbarLogoFade">
+          <router-link class="navbar-logo-link" to="/">
+            {logo && <span class="navbar-logo">{logo}</span>}
+            <h1 class="navbar-title" style={titleStyle}>
+              {logoTitle}
+            </h1>
+          </router-link>
         </transition>
       </div>
     );
@@ -71,16 +46,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.sidebarLogoFade-enter-active {
+.navbarLogoFade-enter-active {
   transition: opacity 1.5s;
 }
 
-.sidebarLogoFade-enter,
-.sidebarLogoFade-leave-to {
+.navbarLogoFade-enter,
+.navbarLogoFade-leave-to {
   opacity: 0;
 }
 
-.sidebar-logo-container {
+.navbar-logo-container {
   position: relative;
   width: 100%;
   height: 50px;
@@ -89,18 +64,18 @@ export default {
   text-align: center;
   overflow: hidden;
 
-  & .sidebar-logo-link {
+  & .navbar-logo-link {
     height: 100%;
     width: 100%;
 
-    & .sidebar-logo {
+    & .navbar-logo {
       width: 32px;
       height: 32px;
       vertical-align: middle;
       margin-right: 12px;
     }
 
-    & .sidebar-title {
+    & .navbar-title {
       display: inline-block;
       margin: 0;
       color: #fff;
@@ -109,12 +84,6 @@ export default {
       font-size: 14px;
       font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
       vertical-align: middle;
-    }
-  }
-
-  &.collapse {
-    .sidebar-logo {
-      margin-right: 0px;
     }
   }
 }
