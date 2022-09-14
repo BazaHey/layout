@@ -13,10 +13,14 @@
           <div
             class="block-checkbox-item block-checkbox-item-light fl"
             @click="handleSetting('sideTheme', 'theme-light')"
-          />
+          >
+            <i v-show="settings.sideTheme === 'theme-light'" class="block-checkbox-item-check"></i>
+          </div>
         </el-tooltip>
         <el-tooltip effect="dark" content="暗色菜单风格" placement="top">
-          <div class="block-checkbox-item block-checkbox-item-dark" @click="handleSetting('sideTheme', 'theme-dark')" />
+          <div class="block-checkbox-item block-checkbox-item-dark" @click="handleSetting('sideTheme', 'theme-dark')">
+            <i v-show="settings.sideTheme === 'theme-dark'" class="block-checkbox-item-check"></i>
+          </div>
         </el-tooltip>
       </div>
 
@@ -27,13 +31,19 @@
 
       <h3 class="drawer-title">导航模式</h3>
       <el-tooltip effect="dark" content="侧边菜单布局" placement="top">
-        <div class="block-checkbox-item block-checkbox-item-dark fl" @click="handleSetting('navMode', 'side')" />
+        <div class="block-checkbox-item block-checkbox-item-dark fl" @click="handleSetting('navMode', 'side')">
+          <i v-show="settings.navMode === 'side'" class="block-checkbox-item-check"></i>
+        </div>
       </el-tooltip>
       <el-tooltip effect="dark" content="顶部菜单布局" placement="top">
-        <div class="block-checkbox-item block-checkbox-item-top fl" @click="handleSetting('navMode', 'top')" />
+        <div class="block-checkbox-item block-checkbox-item-top fl" @click="handleSetting('navMode', 'top')">
+          <i v-show="settings.navMode === 'top'" class="block-checkbox-item-check"></i>
+        </div>
       </el-tooltip>
       <el-tooltip effect="dark" content="混合菜单布局" placement="top">
-        <div class="block-checkbox-item block-checkbox-item-mix" @click="handleSetting('navMode', 'mix')" />
+        <div class="block-checkbox-item block-checkbox-item-mix" @click="handleSetting('navMode', 'mix')">
+          <i v-show="settings.navMode === 'mix'" class="block-checkbox-item-check"></i>
+        </div>
       </el-tooltip>
       <div class="drawer-item">
         <span>固定 Header</span>
@@ -289,6 +299,23 @@ export default {
   }
   &-mix:after {
     background-color: #001529;
+  }
+
+  &-check {
+    position: absolute;
+    width: 12px;
+    height: 5px;
+    bottom: 9px;
+    right: 5px;
+    display: inline-block;
+    border: 1px solid #242425;
+    border-width: 0 0 2px 2px;
+    transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    vertical-align: baseline;
   }
 }
 </style>
