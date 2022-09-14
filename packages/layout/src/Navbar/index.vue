@@ -1,4 +1,5 @@
 <script>
+import { Fragment } from 'vue-fragment';
 import Logo from './Logo.vue';
 import Topbar from './Topbar.vue';
 import Mixbar from './Mixbar.vue';
@@ -12,6 +13,7 @@ export default {
     Topbar,
     Mixbar,
     Breadcrumb,
+    Fragment,
   },
   inject: ['app'],
   props: {
@@ -77,7 +79,7 @@ export default {
           />
         )}
         {navMode === 'side' && <breadcrumb class="breadcrumb-container" />}
-        <div>{rightMenu}</div>
+        <fragment>{rightMenu}</fragment>
       </header>
     );
   },
