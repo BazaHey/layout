@@ -69,7 +69,10 @@ export default {
           <div class={{ logo: showLogo }}>{showLogo && <logo logoTitle={logoTitle} sideTheme={sideTheme} />}</div>
         )}
         {navMode === 'top' && (
-          <topbar
+          <topbar sideTheme={sideTheme} theme={theme} topbarRoutes={topbarRoutes} class="topmenu-container" />
+        )}
+        {navMode === 'mix' && (
+          <mixbar
             sideTheme={sideTheme}
             theme={theme}
             topbarRoutes={topbarRoutes}
