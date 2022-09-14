@@ -1,5 +1,5 @@
 <template>
-  <div
+  <aside
     :class="{ 'has-logo': showLogo }"
     :style="{
       backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground,
@@ -33,7 +33,7 @@
       :class="{ 'theme-dark': sideTheme === 'theme-dark' }"
       @toggleClick="toggleSidebar"
     />
-  </div>
+  </aside>
 </template>
 
 <script>

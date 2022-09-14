@@ -57,7 +57,7 @@ export default {
     const rightMenu = this.app.$slots.rightMenu;
 
     return (
-      <div
+      <header
         class={{ navbar: true, 'has-logo': showLogo }}
         style={{
           backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground,
@@ -78,7 +78,7 @@ export default {
         )}
         {navMode === 'side' && <breadcrumb class="breadcrumb-container" />}
         <div>{rightMenu}</div>
-      </div>
+      </header>
     );
   },
 };

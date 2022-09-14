@@ -7,7 +7,7 @@
       :logoTitle="logoTitle"
       :sideTheme="settings.sideTheme"
       :theme="settings.theme"
-      :showLogo="settings.showLogo"
+      :showLogo="settings.showLogo && settings.navMode !== 'mix'"
       :sidebarOpened="sidebar.opened"
       :sidebarRoutes="sidebarRoutes"
       @toggleSidebar="toggleSidebar"
