@@ -2,7 +2,7 @@
   <div :class="classObj" class="thtf-pro-basicLayout" :style="{ '--current-color': settings.theme }">
     <div v-if="device === 'mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
     <sidebar
-      v-if="showSide"
+      v-show="showSide"
       :device="device"
       :logoTitle="logoTitle"
       :sideTheme="settings.sideTheme"
