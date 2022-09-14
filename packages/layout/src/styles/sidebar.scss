@@ -150,6 +150,12 @@
   .thtf-layout-header {
     height: 50px;
   }
+
+  .headerHide {
+    .thtf-layout-header {
+      height: 0;
+    }
+  }
 }
 
 .fixed-header {

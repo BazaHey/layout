@@ -148,7 +148,7 @@ export default {
         return false;
       }
 
-      if (this.sidebar.hide) {
+      if (this.sidebar.hide && !this.settings.showSide) {
         return false;
       }
 
