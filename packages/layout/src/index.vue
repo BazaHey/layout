@@ -17,19 +17,20 @@
       :class="{ hasTagsView: settings.showTagsView, headerHide: !settings.showHeader, sidebarHide: !showSide }"
       class="main-container"
     >
-      <div v-if="settings.showHeader" :class="{ 'fixed-header': settings.fixedHeader }">
-        <navbar
-          :sidebarOpened="sidebar.opened"
-          :sideTheme="settings.sideTheme"
-          :theme="settings.theme"
-          :navMode="settings.navMode"
-          :logoTitle="logoTitle"
-          :showLogo="settings.showLogo"
-          :topbarRoutes="topbarRoutes"
-          @toggleSidebarHide="toggleSidebarHide"
-          @setSidebarRoutes="setSidebarRoutes"
-        />
-      </div>
+      <navbar
+        v-if="settings.showHeader"
+        :class="{ 'fixed-header': settings.fixedHeader || settings.navMode === 'mix' }"
+        :sidebarOpened="sidebar.opened"
+        :sideTheme="settings.sideTheme"
+        :theme="settings.theme"
+        :navMode="settings.navMode"
+        :logoTitle="logoTitle"
+        :showLogo="settings.showLogo"
+        :topbarRoutes="topbarRoutes"
+        @toggleSidebarHide="toggleSidebarHide"
+        @setSidebarRoutes="setSidebarRoutes"
+      />
+      <header class="thtf-layout-header"></header>
       <tags-view v-if="settings.showTagsView" />
       <app-main :tagsView="tagsView" />
     </div>

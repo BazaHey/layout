@@ -140,6 +140,16 @@
   .sidebar-container {
     padding-top: 50px;
   }
+
+  .navbar {
+    position: fixed;
+    width: 100%;
+    z-index: 1002;
+  }
+
+  .thtf-layout-header {
+    height: 50px;
+  }
 }
 
 .fixed-header {
