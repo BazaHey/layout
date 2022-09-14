@@ -58,20 +58,24 @@ export default {
 
     return (
       <div
-        class="navbar"
+        class={{ navbar: true, 'has-logo': showLogo }}
         style={{
           backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground,
         }}
       >
-        <div class={{ logo: showLogo }}>{showLogo && <logo logoTitle={logoTitle} sideTheme={sideTheme} />}</div>
-        <topbar
-          sideTheme={sideTheme}
-          theme={theme}
-          topbarRoutes={topbarRoutes}
-          vOn:toggleSidebarHide={this.toggleSidebarHide}
-          vOn:setSidebarRoutes={this.setSidebarRoutes}
-          class="topmenu-container"
-        />
+        {navMode !== 'side' && (
+          <div class={{ logo: showLogo }}>{showLogo && <logo logoTitle={logoTitle} sideTheme={sideTheme} />}</div>
+        )}
+        {navMode === 'top' && (
+          <topbar
+            sideTheme={sideTheme}
+            theme={theme}
+            topbarRoutes={topbarRoutes}
+            vOn:toggleSidebarHide={this.toggleSidebarHide}
+            vOn:setSidebarRoutes={this.setSidebarRoutes}
+            class="topmenu-container"
+          />
+        )}
         {navMode === 'side' && <breadcrumb class="breadcrumb-container" />}
         <div>{rightMenu}</div>
       </div>
@@ -101,7 +105,11 @@ export default {
   .topmenu-container {
     position: absolute;
     width: 100%;
-    padding-left: $base-sidebar-width;
+  }
+  &.has-logo {
+    .topmenu-container {
+      padding-left: $base-sidebar-width;
+    }
   }
 
   .errLog-container {
