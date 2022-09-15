@@ -118,13 +118,6 @@ export const mockData = [
         component: '404',
         meta: { title: '表单构建', icon: 'build', noCache: false, link: null },
       },
-      {
-        name: 'Gen',
-        path: 'gen',
-        hidden: false,
-        component: '404',
-        meta: { title: '代码生成', icon: 'code', noCache: false, link: null },
-      },
     ],
   },
 ];

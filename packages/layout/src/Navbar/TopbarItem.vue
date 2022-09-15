@@ -34,7 +34,7 @@
 <script>
 import { Fragment } from 'vue-fragment';
 import path from 'path';
-import Item from '../Sidebar/Item';
+import Item from './Item';
 import AppLink from '../Sidebar/Link';
 import FixiOSBug from '../Sidebar/FixiOSBug';
 
