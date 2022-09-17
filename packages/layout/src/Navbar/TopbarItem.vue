@@ -35,7 +35,7 @@
 import { Fragment } from 'vue-fragment';
 import path from 'path';
 import Item from './Item';
-import AppLink from '../Sidebar/Link';
+import AppLink from './Link';
 import FixiOSBug from '../Sidebar/FixiOSBug';
 
 function isExternal(path) {

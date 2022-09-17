@@ -34,6 +34,7 @@
       <tags-view v-if="settings.showTagsView" />
       <app-main :tagsView="tagsView" />
     </div>
+
     <right-panel :showSettings="settings.showSettings" @changeSetting="handleSetting">
       <settings
         :settings="settings"
@@ -54,23 +55,10 @@ import TagsView from './TagsView';
 import RightPanel from './RightPanel';
 import Settings from './Settings';
 import variables from './styles/variables.module.scss';
-import { filterAsyncRouter } from './utils';
 import './styles/sidebar.scss';
 
 const { body } = document;
 const WIDTH = 992; // refer to Bootstrap's responsive design
-// const defaultSettings = {
-//   showSettings: false,
-//   sideTheme: 'theme-dark',
-//   navMode: 'mix', // 导航模式：侧边菜单布局、顶部菜单布局、混合菜单布局
-//   fixedHeader: true, // 固定Header
-//   fixedSide: true, // 固定侧边菜单
-//   autoMenu: true, // 自动分割菜单
-//   showHeader: true, // 显示顶栏
-//   showSide: true, // 显示菜单，即显示侧边菜单
-//   showLogo: true, // 显示Logo
-//   showTagsView: false, // 显示页签
-// };
 
 export default {
   name: 'ProLayout',
@@ -98,7 +86,18 @@ export default {
     },
     settings: {
       type: Object,
-      default: () => {},
+      default: () => ({
+        showSettings: false,
+        sideTheme: 'theme-dark',
+        navMode: 'mix', // 导航模式：侧边菜单布局、顶部菜单布局、混合菜单布局
+        fixedHeader: true, // 固定Header
+        fixedSide: true, // 固定侧边菜单
+        autoMenu: true, // 自动分割菜单
+        showHeader: true, // 显示顶栏
+        showSide: true, // 显示菜单，即显示侧边菜单
+        showLogo: true, // 显示Logo
+        showTagsView: false, // 显示页签
+      }),
     },
   },
   data() {
@@ -163,7 +162,7 @@ export default {
     },
     menuRoutes: {
       handler(val) {
-        this.sidebarRoutes = filterAsyncRouter(JSON.parse(JSON.stringify(val)));
+        this.sidebarRoutes = val;
         this.topbarRoutes = JSON.parse(JSON.stringify(this.sidebarRoutes));
         this.defaultRoutes = JSON.parse(JSON.stringify(this.sidebarRoutes));
       },

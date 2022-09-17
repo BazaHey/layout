@@ -3,8 +3,8 @@
     <el-menu :default-active="activeMenu" mode="horizontal" @select="handleSelect">
       <template v-for="(item, index) in topMenus">
         <el-menu-item v-if="index < visibleNumber" :key="index" :index="item.path" :style="{ '--theme': theme }">
-          <svg-icon :icon-class="item.meta.icon" />
-          {{ item.meta.title }}
+          <svg-icon :icon-class="item.meta?.icon || ''" />
+          {{ item.meta?.title }}
         </el-menu-item>
       </template>
 
@@ -13,8 +13,8 @@
         <template slot="title">更多菜单</template>
         <template v-for="(item, index) in topMenus">
           <el-menu-item v-if="index >= visibleNumber" :key="index" :index="item.path">
-            <svg-icon :icon-class="item.meta.icon" />
-            {{ item.meta.title }}
+            <svg-icon :icon-class="item.meta?.icon || ''" />
+            {{ item.meta?.title }}
           </el-menu-item>
         </template>
       </el-submenu>

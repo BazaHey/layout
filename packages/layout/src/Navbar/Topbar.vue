@@ -61,3 +61,11 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.el-scrollbar__view {
+  ul > a {
+    float: left;
+  }
+}
+</style>
