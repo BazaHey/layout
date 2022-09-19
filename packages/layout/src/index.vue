@@ -31,10 +31,9 @@
         @setSidebarRoutes="setSidebarRoutes"
       />
       <header class="thtf-layout-header"></header>
-      <tags-view v-if="settings.showTagsView" />
+      <tags-view v-if="settings.showTagsView" ref="tagsView" />
       <app-main :tagsView="tagsView" />
     </div>
-
     <right-panel :showSettings="settings.showSettings" @changeSetting="handleSetting">
       <settings
         :settings="settings"
@@ -55,11 +54,24 @@ import TagsView from './TagsView';
 import RightPanel from './RightPanel';
 import Settings from './Settings';
 import variables from './styles/variables.module.scss';
+// import { filterAsyncRouter } from './utils';
+
 import './styles/sidebar.scss';
 
 const { body } = document;
 const WIDTH = 992; // refer to Bootstrap's responsive design
-
+// const defaultSettings = {
+//   showSettings: false,
+//   sideTheme: 'theme-dark',
+//   navMode: 'mix', // 导航模式：侧边菜单布局、顶部菜单布局、混合菜单布局
+//   fixedHeader: true, // 固定Header
+//   fixedSide: true, // 固定侧边菜单
+//   autoMenu: true, // 自动分割菜单
+//   showHeader: true, // 显示顶栏
+//   showSide: true, // 显示菜单，即显示侧边菜单
+//   showLogo: true, // 显示Logo
+//   showTagsView: false, // 显示页签
+// };
 export default {
   name: 'ProLayout',
   components: {
@@ -86,18 +98,7 @@ export default {
     },
     settings: {
       type: Object,
-      default: () => ({
-        showSettings: false,
-        sideTheme: 'theme-dark',
-        navMode: 'mix', // 导航模式：侧边菜单布局、顶部菜单布局、混合菜单布局
-        fixedHeader: true, // 固定Header
-        fixedSide: true, // 固定侧边菜单
-        autoMenu: true, // 自动分割菜单
-        showHeader: true, // 显示顶栏
-        showSide: true, // 显示菜单，即显示侧边菜单
-        showLogo: true, // 显示Logo
-        showTagsView: false, // 显示页签
-      }),
+      default: () => {},
     },
   },
   data() {
@@ -159,9 +160,15 @@ export default {
       if (this.device === 'mobile' && this.sidebar.opened) {
         this.closeSidebar({ withoutAnimation: false });
       }
+      const { name } = route;
+      if (name) {
+        this.addVisitedView(route);
+        this.addCacheView(route);
+      }
     },
     menuRoutes: {
       handler(val) {
+        // this.sidebarRoutes = filterAsyncRouter(JSON.parse(JSON.stringify(val)));
         this.sidebarRoutes = val;
         this.topbarRoutes = JSON.parse(JSON.stringify(this.sidebarRoutes));
         this.defaultRoutes = JSON.parse(JSON.stringify(this.sidebarRoutes));
@@ -202,7 +209,120 @@ export default {
     handleSetting(obj) {
       this.$emit('changeSetting', obj);
     },
-
+    // 添加访问过的view by yut 20220919
+    addVisitedView(view) {
+      if (this.tagsView.visitedViews.some((v) => v.path === view.path)) return;
+      const activeName = ['AddAndEditInitRules'];
+      if (activeName.includes(view.name)) {
+        this.tagsView.visitedViews.push(
+          Object.assign({}, view, {
+            title: view.query.navTitle || 'no-name',
+          }),
+        );
+      } else {
+        this.tagsView.visitedViews.push(
+          Object.assign({}, view, {
+            title: view.meta.title || 'no-name',
+          }),
+        );
+      }
+    },
+    // 缓存view by yut 20220919
+    addCacheView(view) {
+      if (this.tagsView.cachedViews.includes(view.name)) return;
+      if (view.meta && !view.meta.noCache) {
+        this.tagsView.cachedViews.push(view.name);
+      }
+    },
+    // 更新view视图 by yut 20220919
+    updateVisitedView(view) {
+      for (let v of this.tagsView.visitedViews) {
+        if (v.path === view.path) {
+          const activeName = ['AddAndEditInitRules'];
+          if (activeName.includes(view.name)) {
+            v = Object.assign(v, view, {
+              title: view.query.navTitle || 'no-name',
+            });
+          } else {
+            v = Object.assign(v, view);
+          }
+          break;
+        }
+      }
+    },
+    //  删除右侧view视图 by yut 20220919
+    delRightTags(view) {
+      const index = this.tagsView.visitedViews.findIndex((v) => v.path === view.path);
+      if (index === -1) {
+        return;
+      }
+      this.tagsView.visitedViews = this.tagsView.visitedViews.filter((item, idx) => {
+        if (idx <= index || (item.meta && item.meta.affix)) {
+          return true;
+        }
+        const i = this.tagsView.cachedViews.indexOf(item.name);
+        if (i > -1) {
+          this.tagsView.cachedViews.splice(i, 1);
+        }
+        return false;
+      });
+    },
+    // 删除左侧view视图 by yut 20220919
+    delLeftTags(view) {
+      const index = this.tagsView.visitedViews.findIndex((v) => v.path === view.path);
+      if (index === -1) {
+        return;
+      }
+      this.tagsView.visitedViews = this.tagsView.visitedViews.filter((item, idx) => {
+        if (idx >= index || (item.meta && item.meta.affix)) {
+          return true;
+        }
+        const i = this.tagsView.cachedViews.indexOf(item.name);
+        if (i > -1) {
+          this.tagsView.cachedViews.splice(i, 1);
+        }
+        return false;
+      });
+    },
+    // 删除tag视图
+    delView(view) {
+      for (const [i, v] of this.tagsView.visitedViews.entries()) {
+        if (v.path === view.path) {
+          this.tagsView.visitedViews.splice(i, 1);
+          break;
+        }
+      }
+    },
+    // 删除缓存的视图
+    delCachedView(view) {
+      const index = this.tagsView.cachedViews.indexOf(view.name);
+      index > -1 && this.tagsView.cachedViews.splice(index, 1);
+    },
+    // 删除访问过的views
+    delOthersVisitedViews(view) {
+      this.tagsView.visitedViews = this.tagsView.visitedViews.filter((v) => {
+        return v.meta.affix || v.path === view.path;
+      });
+    },
+    // 删除缓存过的views
+    delOthersCachedViews(view) {
+      const index = this.tagsView.cachedViews.indexOf(view.name);
+      if (index > -1) {
+        this.tagsView.cachedViews = this.tagsView.cachedViews.slice(index, index + 1);
+      } else {
+        this.tagsView.cachedViews = [];
+      }
+    },
+    // 关闭所有标签
+    delAllVisitedViews() {
+      // keep affix tags
+      const affixTags = this.tagsView.visitedViews.filter((tag) => tag.meta.affix);
+      this.tagsView.visitedViews = affixTags;
+    },
+    // 关闭所有缓存标签
+    delAllCachedViews() {
+      this.tagsView.cachedViews = [];
+    },
     handleClickOutside() {
       this.closeSidebar({ withoutAnimation: false });
     },
@@ -227,11 +347,35 @@ export default {
     window.addEventListener('resize', this.$_resizeHandler);
   },
   mounted() {
+    const self = this;
     const isMobile = this.$_isMobile();
     if (isMobile) {
       this.device = 'mobile';
       this.closeSidebar({ withoutAnimation: true });
     }
+
+    this.$nextTick(() => {
+      this.$eventBus_base.$on('delView', function (obj) {
+        self.delView(obj);
+        self.delCachedView(obj);
+        self.$refs.tagsView.toLastView(self.tagsView.visitedViews, obj);
+      });
+      this.$eventBus_base.$on('delRightTags', function (obj) {
+        self.delRightTags(obj);
+      });
+      this.$eventBus_base.$on('delLeftTags', function (obj) {
+        self.delLeftTags(obj);
+      });
+      this.$eventBus_base.$on('delOthersVisitedViews', function (obj) {
+        self.delOthersVisitedViews(obj);
+        self.delOthersCachedViews(obj);
+        self.$refs.tagsView.moveToCurrentTag();
+      });
+    });
+
+    // this.$eventBus_base.$on('delView', function (obj) {
+    //   this.delView(obj);
+    // });
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.$_resizeHandler);

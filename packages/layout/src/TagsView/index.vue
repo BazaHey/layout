@@ -60,7 +60,7 @@ export default {
   },
   watch: {
     'app.route'() {
-      this.addTags();
+      // this.addTags();
       this.moveToCurrentTag();
     },
     visible(value) {
@@ -72,8 +72,8 @@ export default {
     },
   },
   mounted() {
-    this.initTags();
-    this.addTags();
+    // this.initTags();
+    // this.addTags();
   },
   methods: {
     isActive(route) {
@@ -124,25 +124,26 @@ export default {
       });
       return tags;
     },
-    initTags() {
-      const affixTags = (this.affixTags = this.filterAffixTags(this.routes));
-      for (const tag of affixTags) {
-        // Must have tag name
-        if (tag.name) {
-          this.$store.dispatch('tagsView/addVisitedView', tag);
-        }
-      }
-    },
-    addTags() {
-      const { name } = this.app;
-      if (name) {
-        this.$store.dispatch('tagsView/addView', this.app.route);
-        if (this.app.route.meta.link) {
-          this.$store.dispatch('tagsView/addIframeView', this.app.route);
-        }
-      }
-      return false;
-    },
+    // initTags() {
+    //   const affixTags = (this.affixTags = this.filterAffixTags(this.routes));
+    //   for (const tag of affixTags) {
+    //     // Must have tag name
+    //     if (tag.name) {
+    //       this.$store.dispatch('tagsView/addVisitedView', tag);
+    //     }
+    //   }
+    // },
+    // addTags() {
+    //   const { name } = this.app;
+    //   if (name) {
+    //     this.$store.dispatch('tagsView/addView', this.app.route);
+    //     if (this.app.route.meta.link) {
+    //       this.$store.dispatch('tagsView/addIframeView', this.app.route);
+    //     }
+    //   }
+    //   return false;
+    // },
+    // modified by yut 20220919
     moveToCurrentTag() {
       const tags = this.$refs.tag;
       this.$nextTick(() => {
@@ -151,7 +152,8 @@ export default {
             this.$refs.scrollPane.moveToTarget(tag);
             // when query is different then update
             if (tag.to.fullPath !== this.app.route.fullPath) {
-              this.$store.dispatch('tagsView/updateVisitedView', this.app.route);
+              this.$eventBus_base.$emit('updateVisitedView', this.app.route);
+              // this.$store.dispatch('tagsView/updateVisitedView', this.app.route);
             }
             break;
           }
@@ -160,30 +162,28 @@ export default {
     },
     refreshSelectedTag(view) {
       this.$tab.refreshPage(view);
-      if (this.app.route.meta.link) {
-        this.$store.dispatch('tagsView/delIframeView', this.app.route);
-      }
+      // 和统计云ruoyi不太一致 暂时注释掉
+      // if (this.app.route.meta.link) {
+      //   this.$store.dispatch('tagsView/delIframeView', this.app.route);
+      // }
     },
+    // 通用tab操作 触发布局组件中的方法 by yut
     closeSelectedTag(view) {
-      this.$tab.closePage(view).then(({ visitedViews }) => {
-        if (this.isActive(view)) {
-          this.toLastView(visitedViews, view);
-        }
-      });
+      this.$tab.closePage(view);
     },
     closeRightTags() {
-      this.$tab.closeRightPage(this.selectedTag).then((visitedViews) => {
+      this.$tab.closeRightPage(this.selectedTag); /* .then((visitedViews) => {
         if (!visitedViews.find((i) => i.fullPath === this.app.route.fullPath)) {
           this.toLastView(visitedViews);
         }
-      });
+      }); */
     },
     closeLeftTags() {
-      this.$tab.closeLeftPage(this.selectedTag).then((visitedViews) => {
+      this.$tab.closeLeftPage(this.selectedTag); /* .then((visitedViews) => {
         if (!visitedViews.find((i) => i.fullPath === this.app.route.fullPath)) {
           this.toLastView(visitedViews);
         }
-      });
+      }); */
     },
     closeOthersTags() {
       this.$router.push(this.selectedTag).catch(() => {});
@@ -192,12 +192,13 @@ export default {
       });
     },
     closeAllTags(view) {
-      this.$tab.closeAllPage().then(({ visitedViews }) => {
+      this.$tab.closeAllPage();
+      /* .then(({ visitedViews }) => {
         if (this.affixTags.some((tag) => tag.path === this.app.route.path)) {
           return;
         }
         this.toLastView(visitedViews, view);
-      });
+      }); */
     },
     toLastView(visitedViews, view) {
       const latestView = visitedViews.slice(-1)[0];
