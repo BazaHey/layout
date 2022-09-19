@@ -47,7 +47,8 @@
       </el-tooltip>
       <div class="drawer-item">
         <span>固定 Header</span>
-        <el-switch :value="settings.fixedHeader" @change="handleFixedHeader" class="fr" />
+        <el-switch v-if="settings.navMode === 'mix'" :value="true" disabled @change="handleFixedHeader" class="fr" />
+        <el-switch v-else :value="settings.fixedHeader" @change="handleFixedHeader" class="fr" />
       </div>
       <div class="drawer-item">
         <span>固定侧边菜单</span>

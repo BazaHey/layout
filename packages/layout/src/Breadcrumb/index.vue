@@ -64,6 +64,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.breadcrumb-enter-active,
+.breadcrumb-leave-active {
+  transition: all 0.5s;
+}
+
+.breadcrumb-enter,
+.breadcrumb-leave-active {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.breadcrumb-move {
+  transition: all 0.5s;
+}
+
+.breadcrumb-leave-active {
+  position: absolute;
+}
+
 .app-breadcrumb.el-breadcrumb {
   display: inline-block;
   font-size: 14px;

@@ -60,7 +60,7 @@ export default {
 
     return (
       <header
-        class={{ navbar: true, 'has-logo': showLogo && navMode !== 'side' }}
+        class={{ header: true, 'has-logo': showLogo && navMode !== 'side' }}
         style={{
           backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground,
         }}
