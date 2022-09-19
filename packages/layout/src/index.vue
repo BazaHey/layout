@@ -8,15 +8,16 @@
       :sideTheme="settings.sideTheme"
       :theme="settings.theme"
       :showLogo="settings.showLogo && settings.navMode !== 'mix'"
+      :fixedSide="settings.fixedSide"
       :sidebarOpened="sidebar.opened"
       :sidebarRoutes="sidebarRoutes"
       @toggleSidebar="toggleSidebar"
       class="sidebar-container"
+      :class="{ 'sidebar-container-fixed': settings.fixedSide }"
     />
-    <div
-      :class="{ hasTagsView: settings.showTagsView, headerHide: !settings.showHeader, sidebarHide: !showSide }"
-      class="main-container"
-    >
+    <div v-if="settings.fixedSide && showSide" class="sidebar-container-placeholder"></div>
+
+    <div :class="{ hasTagsView: settings.showTagsView }" class="main-container">
       <navbar
         v-if="settings.showHeader"
         :class="{ 'fixed-header': settings.fixedHeader || settings.navMode === 'mix' }"
@@ -30,7 +31,7 @@
         @toggleSidebarHide="toggleSidebarHide"
         @setSidebarRoutes="setSidebarRoutes"
       />
-      <header class="thtf-layout-header"></header>
+      <header v-if="settings.fixedHeader" class="navbar-placeholder"></header>
       <tags-view v-if="settings.showTagsView" ref="tagsView" />
       <app-main :tagsView="tagsView" />
     </div>
@@ -124,14 +125,14 @@ export default {
   },
   computed: {
     classObj() {
-      const { navMode, fixedSide } = this.settings;
+      const { navMode } = this.settings;
       return {
         'thtf-pro-basicLayout-side': navMode === 'side',
         'thtf-pro-basicLayout-top': navMode === 'top',
         'thtf-pro-basicLayout-mix': navMode === 'mix',
-        'thtf-pro-basicLayout-fix-siderbar': fixedSide,
         closeSidebar: !this.sidebar.opened,
         openSidebar: this.sidebar.opened,
+        hideSidebar: !this.showSide,
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile',
       };

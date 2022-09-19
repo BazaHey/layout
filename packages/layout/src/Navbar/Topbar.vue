@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar :class="sideTheme" wrap-class="scrollbar-wrapper__x">
+  <el-scrollbar :class="sideTheme" wrap-class="scrollbar-wrapper__x scrollbar-wrapper__y">
     <el-menu
       :default-active="activeMenu"
       :background-color="sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground"

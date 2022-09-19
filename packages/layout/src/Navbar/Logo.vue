@@ -1,8 +1,12 @@
 <script>
+import { Fragment } from 'vue-fragment';
 import variables from '../styles/variables.module.scss';
 
 export default {
   name: 'NavbarLogo',
+  components: {
+    Fragment,
+  },
   inject: ['app'],
   props: {
     logoTitle: {
@@ -31,14 +35,12 @@ export default {
 
     return (
       <div class="navbar-logo-container" style={style}>
-        <transition name="navbarLogoFade">
-          <router-link class="navbar-logo-link" to="/">
-            {logo && <span class="navbar-logo">{logo}</span>}
-            <h1 class="navbar-title" style={titleStyle}>
-              {logoTitle}
-            </h1>
-          </router-link>
-        </transition>
+        <router-link class="navbar-logo-link" to="/">
+          <fragment>{logo}</fragment>
+          <h1 class="navbar-title" style={titleStyle}>
+            {logoTitle}
+          </h1>
+        </router-link>
       </div>
     );
   },
@@ -46,44 +48,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.navbarLogoFade-enter-active {
-  transition: opacity 1.5s;
-}
-
-.navbarLogoFade-enter,
-.navbarLogoFade-leave-to {
-  opacity: 0;
-}
-
 .navbar-logo-container {
-  position: relative;
-  width: 100%;
-  height: 50px;
-  line-height: 50px;
-  background: #2b2f3a;
-  text-align: center;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  cursor: pointer;
 
   & .navbar-logo-link {
-    height: 100%;
-    width: 100%;
-
-    & .navbar-logo {
-      width: 32px;
-      height: 32px;
-      vertical-align: middle;
-      margin-right: 12px;
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
 
     & .navbar-title {
-      display: inline-block;
-      margin: 0;
+      margin: 0 0 0 12px;
       color: #fff;
       font-weight: 600;
-      line-height: 50px;
-      font-size: 14px;
-      font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
-      vertical-align: middle;
+      font-size: 18px;
     }
   }
 }

@@ -6,7 +6,7 @@
     }"
   >
     <logo v-if="showLogo" :logoTitle="logoTitle" :collapse="isCollapse" :sideTheme="sideTheme" />
-    <el-scrollbar :class="sideTheme" wrap-class="scrollbar-wrapper__y">
+    <el-scrollbar v-if="fixedSide" :class="sideTheme" wrap-class="scrollbar-wrapper__y">
       <el-menu
         :default-active="activeMenu"
         :collapse="isCollapse"
@@ -26,6 +26,26 @@
         />
       </el-menu>
     </el-scrollbar>
+    <div v-else :class="sideTheme" style="flex: 1">
+      <el-menu
+        :default-active="activeMenu"
+        :collapse="isCollapse"
+        :background-color="sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground"
+        :text-color="sideTheme === 'theme-dark' ? variables.menuColor : variables.menuLightColor"
+        :unique-opened="true"
+        :active-text-color="theme"
+        :collapse-transition="false"
+        mode="vertical"
+      >
+        <sidebar-item
+          v-for="(route, index) in sidebarRoutes"
+          :key="route.path + index"
+          :item="route"
+          :base-path="route.path"
+          :device="device"
+        />
+      </el-menu>
+    </div>
 
     <hamburger
       :is-active="sidebarOpened"
@@ -66,6 +86,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    fixedSide: {
+      type: Boolean,
+      default: true,
+    },
     sidebarOpened: {
       type: Boolean,
       default: true,
@@ -99,24 +123,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.hamburger-container {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 46px;
-  line-height: 46px;
-  cursor: pointer;
-  transition: background 0.3s;
-  -webkit-tap-highlight-color: transparent;
-
-  &:hover {
-    background: rgba(0, 0, 0, 0.025);
-  }
-}
-
-.hamburger-container.theme-dark {
-  fill: #fff;
-}
-</style>

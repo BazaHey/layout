@@ -1,8 +1,12 @@
 <script>
+import { Fragment } from 'vue-fragment';
 import variables from '../styles/variables.module.scss';
 
 export default {
   name: 'SidebarLogo',
+  components: {
+    Fragment,
+  },
   inject: ['app'],
   props: {
     logoTitle: {
@@ -44,77 +48,61 @@ export default {
 
     return (
       <div class={className} style={style}>
-        <transition name="sidebarLogoFade">
-          {collapse ? (
-            <router-link key="collapse" class="sidebar-logo-link" to="/">
-              {logo ? (
-                <span class="sidebar-logo">{logo}</span>
-              ) : (
-                <h1 class="sidebar-title" style={titleStyle}>
-                  {logoTitle}
-                </h1>
-              )}
-            </router-link>
-          ) : (
-            <router-link key="expand" class="sidebar-logo-link" to="/">
-              {logo && <span class="sidebar-logo">{logo}</span>}
-              <h1 class="sidebar-title" style={titleStyle}>
-                {logoTitle}
-              </h1>
-            </router-link>
+        <router-link class="sidebar-logo-link" to="/">
+          <fragment>{logo}</fragment>
+          {!collapse && (
+            <h1 class="sidebar-title" style={titleStyle}>
+              {logoTitle}
+            </h1>
           )}
-        </transition>
+        </router-link>
       </div>
     );
   },
 };
 </script>
 
-<style lang="scss" scoped>
-.sidebarLogoFade-enter-active {
-  transition: opacity 1.5s;
-}
+<style lang="scss" scope>
+@keyframes pro-layout-title-hide {
+  0% {
+    display: none;
+    opacity: 0;
+  }
 
-.sidebarLogoFade-enter,
-.sidebarLogoFade-leave-to {
-  opacity: 0;
+  80% {
+    display: none;
+    opacity: 0;
+  }
+
+  to {
+    display: unset;
+    opacity: 1;
+  }
 }
 
 .sidebar-logo-container {
-  position: relative;
-  width: 100%;
-  height: 50px;
-  line-height: 50px;
-  background: #2b2f3a;
-  text-align: center;
-  overflow: hidden;
-
-  & .sidebar-logo-link {
-    height: 100%;
-    width: 100%;
-
-    & .sidebar-logo {
-      width: 32px;
-      height: 32px;
-      vertical-align: middle;
-      margin-right: 12px;
-    }
-
-    & .sidebar-title {
-      display: inline-block;
-      margin: 0;
-      color: #fff;
-      font-weight: 600;
-      line-height: 50px;
-      font-size: 14px;
-      font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
-      vertical-align: middle;
-    }
-  }
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  cursor: pointer;
+  transition: padding 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 
   &.collapse {
-    .sidebar-logo {
-      margin-right: 0px;
+    padding: 16px 8px;
+  }
+
+  & .sidebar-logo-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+
+    & .sidebar-title {
+      margin: 0 0 0 12px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 18px;
+      animation: pro-layout-title-hide 0.3s;
     }
   }
 }
