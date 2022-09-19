@@ -60,14 +60,12 @@ export default {
 
     return (
       <header
-        class={{ navbar: true, 'has-logo': showLogo }}
+        class={{ navbar: true, 'has-logo': showLogo && navMode !== 'side' }}
         style={{
           backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground,
         }}
       >
-        {navMode !== 'side' && (
-          <div class={{ logo: showLogo }}>{showLogo && <logo logoTitle={logoTitle} sideTheme={sideTheme} />}</div>
-        )}
+        {navMode !== 'side' && showLogo && <logo logoTitle={logoTitle} sideTheme={sideTheme} />}
         {navMode === 'top' && (
           <topbar sideTheme={sideTheme} theme={theme} topbarRoutes={topbarRoutes} class="topmenu-container" />
         )}
@@ -88,38 +86,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import '../styles/variables.module.scss';
-.navbar {
-  height: 50px;
-  overflow: hidden;
-  position: relative;
-  background: #fff;
-  box-shadow: 2px 0 6px rgb(0 21 41 / 35%);
-
-  .logo {
-    width: $base-sidebar-width;
-    float: left;
-  }
-
-  .breadcrumb-container {
-    float: left;
-  }
-
-  .topmenu-container {
-    position: absolute;
-    width: 100%;
-  }
-  &.has-logo {
-    .topmenu-container {
-      padding-left: $base-sidebar-width;
-    }
-  }
-
-  .errLog-container {
-    display: inline-block;
-    vertical-align: top;
-  }
-}
-</style>

@@ -1,20 +1,76 @@
 @import './variables.module';
 
+// ---------- layout ----------
 .thtf-pro-basicLayout {
   position: relative;
   height: 100%;
   width: 100%;
 
-  &:after {
-    content: '';
-    display: table;
-    clear: both;
-  }
-
   &.mobile.openSidebar {
     position: fixed;
     top: 0;
   }
+}
+
+.thtf-pro-basicLayout-side {
+  display: flex;
+  flex-flow: row wrap;
+
+  &.openSidebar {
+    .sidebar-container,
+    .sidebar-container-placeholder {
+      width: $base-sidebar-width;
+    }
+    .fixed-header {
+      width: calc(100% - #{$base-sidebar-width});
+    }
+  }
+
+  &.closeSidebar {
+    .sidebar-container,
+    .sidebar-container-placeholder {
+      width: 54px;
+    }
+    .fixed-header {
+      width: calc(100% - 54px);
+    }
+  }
+
+  &.hideSidebar {
+    .fixed-header {
+      width: 100%;
+    }
+  }
+}
+
+.thtf-pro-basicLayout-top {
+}
+
+.thtf-pro-basicLayout-mix {
+  display: flex;
+  flex-flow: row wrap;
+
+  .sidebar-container {
+    padding-top: 50px;
+  }
+
+  .navbar {
+    position: fixed;
+    width: 100%;
+    z-index: 1002;
+  }
+
+  .navbar-placeholder {
+    height: 50px;
+  }
+}
+
+.scrollbar-wrapper__x {
+  overflow-y: hidden !important;
+}
+
+.scrollbar-wrapper__y {
+  overflow-x: hidden !important;
 }
 
 .drawer-bg {
@@ -27,24 +83,67 @@
   z-index: 999;
 }
 
+// ---------- main ----------
 .main-container {
   position: relative;
   min-height: 100%;
-  margin-left: $base-sidebar-width;
-  transition: margin-left 0.28s;
+  min-width: 0;
+  flex: 1;
+  transition: flex-basis 0.28s;
+
+  display: flex;
+  flex-direction: column;
 }
 
-.sidebarHide {
-  margin-left: 0 !important;
+.navbar {
+  height: 50px;
+  overflow: hidden;
+  position: relative;
+  background: #fff;
+  box-shadow: 2px 0 6px rgb(0 21 41 / 35%);
+
+  display: flex;
+  justify-content: space-between;
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    min-width: 192px;
+  }
+
+  .topmenu-container {
+    flex: 1;
+  }
+
+  .errLog-container {
+    display: inline-block;
+    vertical-align: top;
+  }
 }
 
-.sidebar-container {
+.fixed-header {
   position: fixed;
   top: 0;
-  bottom: 0;
-  left: 0;
-  width: $base-sidebar-width !important;
-  height: 100%;
+  right: 0;
+
+  z-index: 9;
+  transition: width 0.28s;
+}
+
+.mobile .fixed-header {
+  width: 100%;
+}
+
+.app-main {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+// ---------- sidebar ----------
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
   font-size: 0px;
   background-color: $base-menu-background;
   box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
@@ -52,16 +151,16 @@
   transition: width 0.28s;
   z-index: 1001;
 
+  &-fixed {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+  }
+
   // reset element-ui css
   .horizontal-collapse-transition {
     transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
-  }
-
-  .scrollbar-wrapper__y {
-    overflow-x: hidden !important;
-  }
-  .scrollbar-wrapper__x {
-    overflow-y: hidden !important;
   }
 
   .el-scrollbar__bar.is-vertical {
@@ -69,13 +168,24 @@
   }
 
   .el-scrollbar {
-    height: 100%;
+    flex: 1;
   }
 
-  &.has-logo {
-    .el-scrollbar {
-      height: calc(100% - 50px);
+  .hamburger-container {
+    display: block;
+    padding: 16px;
+    border-top: 1px solid #ccc;
+    cursor: pointer;
+    transition: background 0.3s;
+    -webkit-tap-highlight-color: transparent;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.025);
     }
+  }
+
+  .hamburger-container.theme-dark {
+    fill: #fff;
   }
 
   .is-horizontal {
@@ -136,58 +246,7 @@
   }
 }
 
-.thtf-pro-basicLayout-mix {
-  .sidebar-container {
-    padding-top: 50px;
-  }
-
-  .navbar {
-    position: fixed;
-    width: 100%;
-    z-index: 1002;
-  }
-
-  .thtf-layout-header {
-    height: 50px;
-  }
-
-  .headerHide {
-    .thtf-layout-header {
-      height: 0;
-    }
-  }
-}
-
-.fixed-header {
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 9;
-  width: calc(100% - #{$base-sidebar-width});
-  transition: width 0.28s;
-}
-
-.closeSidebar .fixed-header {
-  width: calc(100% - 54px);
-}
-
-.sidebarHide .fixed-header {
-  width: 100%;
-}
-
-.mobile .fixed-header {
-  width: 100%;
-}
-
 .closeSidebar {
-  .sidebar-container {
-    width: 54px !important;
-  }
-
-  .main-container {
-    margin-left: 54px;
-  }
-
   .submenu-title-noDropdown {
     padding: 0 !important;
     position: relative;
