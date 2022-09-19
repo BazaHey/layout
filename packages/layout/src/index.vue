@@ -372,10 +372,6 @@ export default {
         self.$refs.tagsView.moveToCurrentTag();
       });
     });
-
-    // this.$eventBus_base.$on('delView', function (obj) {
-    //   this.delView(obj);
-    // });
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.$_resizeHandler);
