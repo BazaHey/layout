@@ -51,11 +51,21 @@
       </div>
       <div class="drawer-item">
         <span>固定侧边菜单</span>
-        <el-switch :value="settings.fixedSide" @change="handleFixedSide" class="fr" />
+        <el-switch
+          :value="settings.fixedSide"
+          :disabled="settings.navMode === 'top'"
+          @change="handleFixedSide"
+          class="fr"
+        />
       </div>
       <div class="drawer-item">
         <span>自动分割菜单</span>
-        <el-switch :value="settings.autoMenu" @change="handleAutoMenu" class="fr" />
+        <el-switch
+          :value="settings.autoMenu"
+          :disabled="settings.navMode !== 'mix'"
+          @change="handleAutoMenu"
+          class="fr"
+        />
       </div>
 
       <h3 class="drawer-title">内容区域</h3>
