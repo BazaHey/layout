@@ -75,7 +75,12 @@
       </div>
       <div class="drawer-item">
         <span>菜单</span>
-        <el-switch :value="settings.showSide" @change="handleShowSide" class="fr" />
+        <el-switch
+          :value="settings.showSide"
+          :disabled="settings.navMode === 'top'"
+          @change="handleShowSide"
+          class="fr"
+        />
       </div>
       <div class="drawer-item">
         <span>显示 Logo</span>

@@ -17,7 +17,7 @@
     />
     <div v-if="settings.fixedSide && showSide" class="sidebar-container-placeholder"></div>
 
-    <div :class="{ hasTagsView: settings.showTagsView }" class="main-container">
+    <div :class="{ hasTagsView: settings.showTagsView, fixedHeader: settings.fixedHeader }" class="main-container">
       <navbar
         v-if="settings.showHeader"
         :class="{ 'fixed-header': settings.fixedHeader || settings.navMode === 'mix' }"
@@ -31,7 +31,7 @@
         @toggleSidebarHide="toggleSidebarHide"
         @setSidebarRoutes="setSidebarRoutes"
       />
-      <header v-if="settings.fixedHeader" class="navbar-placeholder"></header>
+      <header v-if="settings.fixedHeader && settings.showHeader" class="navbar-placeholder"></header>
       <tags-view v-if="settings.showTagsView" ref="tagsView" />
       <app-main :tagsView="tagsView" />
     </div>
