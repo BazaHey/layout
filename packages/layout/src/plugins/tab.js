@@ -2,15 +2,15 @@
  * @Author: yutao
  * @Date: 2022-09-19 13:52:46
  * @LastEditors: yutao
- * @LastEditTime: 2022-09-19 18:35:59
+ * @LastEditTime: 2022-09-20 10:43:01
  * @Description: file content
  */
-import router from '@/router';
+// import router from '@/router';
 import eventBus from '../plugins/eventBus_base';
 export default {
   $eventBus_base1: eventBus,
   // 刷新当前tab页签
-  refreshPage(obj) {
+  refreshPage(obj, router) {
     const { path, query, matched } = router.currentRoute;
     if (obj === undefined) {
       matched.forEach((m) => {
@@ -21,6 +21,7 @@ export default {
         }
       });
     }
+    this.$eventBus_base1.$emit('delCachedView', obj);
     // return store.dispatch('tagsView/delCachedView', obj).then(() => {
     //   const { path, query } = obj;
     //   router.replace({
@@ -38,9 +39,10 @@ export default {
   },
   // 关闭指定tab页签
   closePage(obj) {
-    if (obj === undefined) {
-      this.$eventBus_base1.$emit('delView', router.currentRoute);
-    }
+    // debugger;
+    // if (obj === undefined) {
+    //   this.$eventBus_base1.$emit('delView', router.currentRoute);
+    // }
     this.$eventBus_base1.$emit('delView', obj);
 
     // if (obj === undefined) {

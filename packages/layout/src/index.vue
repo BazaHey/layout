@@ -361,6 +361,13 @@ export default {
         self.delCachedView(obj);
         self.$refs.tagsView.toLastView(self.tagsView.visitedViews, obj);
       });
+      this.$eventBus_base.$on('delCachedView', function (obj) {
+        const { path, query } = obj;
+        self.$router.replace({
+          path: '/redirect' + path,
+          query,
+        });
+      });
       this.$eventBus_base.$on('delRightTags', function (obj) {
         self.delRightTags(obj);
       });
@@ -371,6 +378,10 @@ export default {
         self.delOthersVisitedViews(obj);
         self.delOthersCachedViews(obj);
         self.$refs.tagsView.moveToCurrentTag();
+      });
+      this.$eventBus_base.$on('delAllViews', function (obj) {
+        self.delAllVisitedViews(obj);
+        self.delAllCachedViews(obj);
       });
     });
   },

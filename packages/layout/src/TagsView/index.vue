@@ -161,7 +161,7 @@ export default {
       });
     },
     refreshSelectedTag(view) {
-      this.$tab.refreshPage(view);
+      this.$tab.refreshPage(view, this.app.route);
       // 和统计云ruoyi不太一致 暂时注释掉
       // if (this.app.route.meta.link) {
       //   this.$store.dispatch('tagsView/delIframeView', this.app.route);
@@ -187,9 +187,9 @@ export default {
     },
     closeOthersTags() {
       this.$router.push(this.selectedTag).catch(() => {});
-      this.$tab.closeOtherPage(this.selectedTag).then(() => {
-        this.moveToCurrentTag();
-      });
+      // this.$tab.closeOtherPage(this.selectedTag).then(() => {
+      //   this.moveToCurrentTag();
+      // });
     },
     closeAllTags(view) {
       this.$tab.closeAllPage();
