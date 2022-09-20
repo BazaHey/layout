@@ -12,7 +12,8 @@
   }
 }
 
-.thtf-pro-basicLayout-side {
+.thtf-pro-basicLayout-side,
+.thtf-pro-basicLayout-mix {
   display: flex;
   flex-flow: row wrap;
 
@@ -21,9 +22,6 @@
     .sidebar-container-placeholder {
       width: $base-sidebar-width;
     }
-    .fixed-header {
-      width: calc(100% - #{$base-sidebar-width});
-    }
   }
 
   &.closeSidebar {
@@ -31,36 +29,63 @@
     .sidebar-container-placeholder {
       width: 54px;
     }
-    .fixed-header {
+  }
+}
+
+.thtf-pro-basicLayout-side {
+  &.openSidebar {
+    .header__fixed {
+      width: calc(100% - #{$base-sidebar-width});
+    }
+  }
+
+  &.closeSidebar {
+    .header__fixed {
       width: calc(100% - 54px);
     }
   }
 
   &.hideSidebar {
-    .fixed-header {
+    .header__fixed {
       width: 100%;
+    }
+  }
+
+  .fixedHeader {
+    .header-placeholder {
+      height: 50px;
     }
   }
 }
 
 .thtf-pro-basicLayout-top {
+  .fixedHeader {
+    .header {
+      width: 100%;
+      z-index: 1002;
+    }
+    .header-placeholder {
+      height: 50px;
+    }
+  }
 }
 
 .thtf-pro-basicLayout-mix {
-  display: flex;
-  flex-flow: row wrap;
-
-  .sidebar-container {
-    padding-top: 50px;
+  &.openSidebar {
+    .sidebar-container,
+    .sidebar-container-placeholder {
+      padding-top: 50px;
+      box-shadow: none;
+      border: 1px solid #dcdfe6;
+    }
   }
 
-  .navbar {
-    position: fixed;
+  .header {
     width: 100%;
     z-index: 1002;
   }
 
-  .navbar-placeholder {
+  .header-placeholder {
     height: 50px;
   }
 }
@@ -95,7 +120,7 @@
   flex-direction: column;
 }
 
-.navbar {
+.header {
   height: 50px;
   overflow: hidden;
   position: relative;
@@ -105,32 +130,19 @@
   display: flex;
   justify-content: space-between;
 
-  .logo-container {
-    display: flex;
-    align-items: center;
-    min-width: 192px;
+  &__fixed {
+    position: fixed;
+    top: 0;
+    right: 0;
+    transition: width 0.28s;
   }
 
   .topmenu-container {
     flex: 1;
   }
-
-  .errLog-container {
-    display: inline-block;
-    vertical-align: top;
-  }
 }
 
-.fixed-header {
-  position: fixed;
-  top: 0;
-  right: 0;
-
-  z-index: 9;
-  transition: width 0.28s;
-}
-
-.mobile .fixed-header {
+.mobile .header__fixed {
   width: 100%;
 }
 
