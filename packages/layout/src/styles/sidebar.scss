@@ -194,10 +194,9 @@
     &:hover {
       background: rgba(0, 0, 0, 0.025);
     }
-  }
-
-  .hamburger-container.theme-dark {
-    fill: #fff;
+    &.theme-dark {
+      fill: #fff;
+    }
   }
 
   .is-horizontal {
@@ -305,10 +304,6 @@
 
 // mobile responsive
 .mobile {
-  .main-container {
-    margin-left: 0px;
-  }
-
   .sidebar-container {
     transition: transform 0.28s;
     width: $base-sidebar-width !important;
@@ -316,10 +311,16 @@
 
   &.closeSidebar {
     .sidebar-container {
+      display: none;
       pointer-events: none;
       transition-duration: 0.3s;
-      transform: translate3d(-$base-sidebar-width, 0, 0);
     }
+  }
+
+  .hamburger {
+    position: fixed;
+    left: 16px;
+    bottom: 16px;
   }
 }
 

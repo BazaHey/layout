@@ -48,9 +48,18 @@
       />
     </right-panel>
 
+    <!-- 隐藏顶部时 -->
     <div v-if="!settings.showHeader" class="handle" @click.stop="handleClick">
       <i class="el-icon-setting"></i>
     </div>
+    <!-- mobile 时 -->
+    <hamburger
+      v-if="device === 'mobile'"
+      :is-active="sidebar.opened"
+      class="hamburger-container hamburger"
+      :class="{ 'theme-dark': settings.sideTheme === 'theme-dark' }"
+      @toggleClick="toggleSidebar"
+    />
   </div>
 </template>
 
@@ -61,6 +70,7 @@ import Sidebar from './Sidebar';
 import TagsView from './TagsView';
 import RightPanel from './RightPanel';
 import Settings from './Settings';
+import Hamburger from './Hamburger';
 import variables from './styles/variables.module.scss';
 
 import './styles/sidebar.scss';
@@ -88,6 +98,7 @@ export default {
     RightPanel,
     Settings,
     TagsView,
+    Hamburger,
   },
   provide() {
     return {
@@ -95,6 +106,11 @@ export default {
     };
   },
   props: {
+    // 设备：桌面(desktop)、移动(mobile)
+    device: {
+      type: String,
+      default: 'desktop',
+    },
     logoTitle: {
       type: String,
       default: '',
@@ -110,8 +126,6 @@ export default {
   },
   data() {
     return {
-      // 设备：桌面(desktop)、移动(mobile)
-      device: 'desktop',
       // 侧边栏
       sidebar: {
         opened: true,
@@ -137,7 +151,7 @@ export default {
         'thtf-pro-basicLayout-mix': navMode === 'mix',
         closeSidebar: !this.sidebar.opened,
         openSidebar: this.sidebar.opened,
-        hideSidebar: !this.showSide,
+        hideSidebar: !this.showSide || this.device === 'mobile',
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile',
       };
@@ -337,7 +351,8 @@ export default {
     $_resizeHandler() {
       if (!document.hidden) {
         const isMobile = this.$_isMobile();
-        this.device = isMobile ? 'mobile' : 'desktop';
+        const device = isMobile ? 'mobile' : 'desktop';
+        this.$emit('onDevice', device);
 
         if (isMobile) {
           this.closeSidebar({ withoutAnimation: true });
@@ -352,7 +367,8 @@ export default {
     const self = this;
     const isMobile = this.$_isMobile();
     if (isMobile) {
-      this.device = 'mobile';
+      this.$emit('onDevice', 'mobile');
+
       this.closeSidebar({ withoutAnimation: true });
     }
 
