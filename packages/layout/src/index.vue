@@ -47,6 +47,10 @@
         @resetSidebarRoutes="resetSidebarRoutes"
       />
     </right-panel>
+
+    <div v-if="!settings.showHeader" class="handle" @click.stop="handleClick">
+      <i class="el-icon-setting"></i>
+    </div>
   </div>
 </template>
 
@@ -58,7 +62,6 @@ import TagsView from './TagsView';
 import RightPanel from './RightPanel';
 import Settings from './Settings';
 import variables from './styles/variables.module.scss';
-// import { filterAsyncRouter } from './utils';
 
 import './styles/sidebar.scss';
 
@@ -171,7 +174,6 @@ export default {
     },
     menuRoutes: {
       handler(val) {
-        // this.sidebarRoutes = filterAsyncRouter(JSON.parse(JSON.stringify(val)));
         this.sidebarRoutes = val;
         this.topbarRoutes = JSON.parse(JSON.stringify(this.sidebarRoutes));
         this.defaultRoutes = JSON.parse(JSON.stringify(this.sidebarRoutes));
@@ -201,6 +203,9 @@ export default {
     },
     resetSidebarRoutes() {
       this.sidebarRoutes = this.defaultRoutes;
+    },
+    handleClick() {
+      this.$emit('changeSetting', { key: 'showSettings', value: true });
     },
     // 配置相关方法
     handleSetting(obj) {

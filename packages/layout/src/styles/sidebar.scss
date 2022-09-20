@@ -365,3 +365,25 @@
     }
   }
 }
+
+.handle {
+  position: fixed;
+  inset-block-start: 240px;
+  inset-inline-end: 0px;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  font-size: 16px;
+  text-align: center;
+  color: #fff;
+  background-color: #1677ff;
+  border-end-start-radius: 8px;
+  border-start-start-radius: 8px;
+  -webkit-backdropilter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  cursor: pointer;
+  pointer-events: auto;
+}
