@@ -117,8 +117,8 @@ export default {
     },
   },
   methods: {
-    toggleSidebar(value) {
-      this.$emit('toggleSidebar', value);
+    toggleSidebar() {
+      this.$emit('toggleSidebar');
     },
   },
 };

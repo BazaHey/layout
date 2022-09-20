@@ -111,7 +111,6 @@ export default {
       device: 'desktop',
       // 侧边栏
       sidebar: {
-        hide: false,
         opened: true,
         widthoutAnimation: true,
       },
@@ -152,7 +151,7 @@ export default {
         return false;
       }
 
-      if (this.sidebar.hide && !this.settings.showSide) {
+      if (!this.settings.showSide) {
         return false;
       }
 
@@ -183,25 +182,19 @@ export default {
   methods: {
     // 侧边栏相关方法
     toggleSidebar() {
-      const { hide, opened } = this.sidebar;
-      if (hide) {
+      const { opened } = this.sidebar;
+      if (!this.settings.showSide) {
         return false;
       }
       this.sidebar.opened = !opened;
       this.sidebar.withoutAnimation = false;
-      if (opened) {
-        localStorage.setItem('sidebarStatus', 1);
-      } else {
-        localStorage.setItem('sidebarStatus', 0);
-      }
     },
     closeSidebar({ withoutAnimation }) {
-      localStorage.setItem('sidebarStatus', 0);
       this.sidebar.opened = false;
       this.sidebar.withoutAnimation = withoutAnimation;
     },
     toggleSidebarHide(status) {
-      this.sidebar.hide = status;
+      this.$emit('changeSetting', { showSide: status });
     },
     setSidebarRoutes(routes) {
       this.sidebarRoutes = routes;
