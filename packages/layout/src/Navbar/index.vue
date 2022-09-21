@@ -37,6 +37,10 @@ export default {
       type: String,
       default: '',
     },
+    headerHeight: {
+      type: Number,
+      default: 80,
+    },
     showLogo: {
       type: Boolean,
       default: false,
@@ -55,13 +59,14 @@ export default {
     },
   },
   render() {
-    const { logoTitle, sideTheme, theme, navMode, showLogo, topbarRoutes } = this;
+    const { logoTitle, sideTheme, theme, navMode, showLogo, headerHeight, topbarRoutes } = this;
     const rightMenu = this.app.$slots.rightMenu;
 
     return (
       <header
         class={{ header: true, 'has-logo': showLogo && navMode !== 'side' }}
         style={{
+          height: Number.isInteger(headerHeight) ? `${headerHeight}px` : 0,
           backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground,
         }}
       >

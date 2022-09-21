@@ -14,12 +14,17 @@
       @toggleSidebar="toggleSidebar"
       class="sidebar-container"
       :class="{ 'sidebar-container-fixed': settings.fixedSide }"
+      :style="{ paddingTop: settings.navMode === 'mix' ? headerHeight : 0 }"
     />
-    <div v-if="settings.fixedSide && showSide" class="sidebar-container-placeholder"></div>
+    <div
+      v-show="settings.fixedSide && showSide"
+      class="sidebar-container-placeholder"
+      :style="{ paddingTop: settings.navMode === 'mix' ? headerHeight : 0 }"
+    ></div>
 
     <div :class="{ hasTagsView: settings.showTagsView, fixedHeader: settings.fixedHeader }" class="main-container">
       <navbar
-        v-if="settings.showHeader"
+        v-show="settings.showHeader"
         :class="{ header__fixed: settings.fixedHeader || settings.navMode === 'mix' }"
         :sidebarOpened="sidebar.opened"
         :sideTheme="settings.sideTheme"
@@ -28,12 +33,15 @@
         :logoTitle="logoTitle"
         :showLogo="settings.showLogo"
         :topbarRoutes="topbarRoutes"
+        :headerHeight="headerHeight"
         @toggleSidebarHide="toggleSidebarHide"
         @setSidebarRoutes="setSidebarRoutes"
       />
       <header
         v-if="(settings.fixedHeader || settings.navMode === 'mix') && settings.showHeader"
+        v-show="(settings.fixedHeader || settings.navMode === 'mix') && settings.showHeader"
         class="header-placeholder"
+        :style="{ height: settings.fixedHeader || settings.navMode === 'mix' ? `${headerHeight}px` : 0 }"
       ></header>
       <tags-view v-if="settings.showTagsView" ref="tagsView" />
       <app-main :tagsView="tagsView" />
@@ -114,6 +122,10 @@ export default {
     logoTitle: {
       type: String,
       default: '',
+    },
+    headerHeight: {
+      type: Number,
+      default: 80,
     },
     menuRoutes: {
       type: Array,
