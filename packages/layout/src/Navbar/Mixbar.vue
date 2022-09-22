@@ -1,22 +1,34 @@
 <template>
   <div>
     <el-menu
+      class="topmenu-container"
       :default-active="activeMenu"
-      :background-color="sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground"
-      :text-color="sideTheme === 'theme-dark' ? variables.menuColor : variables.menuLightColor"
+      :background-color="theme"
+      :text-color="textColor"
       mode="horizontal"
       @select="handleSelect"
     >
       <template v-for="(item, index) in mixMenus">
         <el-menu-item v-if="index < visibleNumber" :key="index" :index="item.path" :style="{ '--theme': theme }">
-          <svg-icon :icon-class="item.meta?.icon || ''" />
-          {{ item.meta?.title }}
+          <div class="box">
+            <svg-icon :icon-class="item.meta?.icon || ''" class-name="icon" />
+            <span class="title">{{ item.meta?.title }}</span>
+          </div>
         </el-menu-item>
       </template>
 
       <!-- 顶部菜单超出数量折叠 -->
-      <el-submenu v-if="mixMenus.length > visibleNumber" :style="{ '--theme': theme }" index="more">
-        <template slot="title">更多菜单</template>
+      <el-submenu
+        v-if="mixMenus.length > visibleNumber"
+        :style="{ '--theme': theme, lineHeight: '80px', height: '80px' }"
+        index="more"
+      >
+        <template slot="title">
+          <div class="box">
+            <svg-icon icon-class="filling-rules" class-name="icon" />
+            <span class="title">更多菜单</span>
+          </div>
+        </template>
         <template v-for="(item, index) in mixMenus">
           <el-menu-item v-if="index >= visibleNumber" :key="index" :index="item.path">
             <svg-icon :icon-class="item.meta?.icon || ''" />
@@ -29,17 +41,13 @@
 </template>
 
 <script>
-import variables from '../styles/variables.module.scss';
+import { getGrayReversedColor } from '../utils';
 // 隐藏侧边栏路由
 const hideList = ['/index', '/user/profile'];
 
 export default {
   name: 'MixNav',
   props: {
-    sideTheme: {
-      type: String,
-      default: '#409EFF',
-    },
     theme: {
       type: String,
       default: '#409EFF',
@@ -58,8 +66,8 @@ export default {
     };
   },
   computed: {
-    variables() {
-      return variables;
+    textColor() {
+      return getGrayReversedColor(this.theme);
     },
     // 顶部显示菜单
     mixMenus() {
@@ -165,28 +173,50 @@ export default {
 </script>
 
 <style lang="scss">
-.topmenu-container.el-menu--horizontal > .el-menu-item {
-  float: left;
-  height: 50px !important;
-  line-height: 50px !important;
-  color: #999093 !important;
-  padding: 0 5px !important;
-  margin: 0 10px !important;
+.box {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 53px;
+  .icon {
+    color: rgb(255, 255, 255);
+    font-size: 24px;
+  }
+  .title {
+    line-height: 20px;
+    font-size: 14px !important;
+    display: inline-block;
+    margin-top: 8px;
+  }
+}
+
+.topmenu-container.el-menu--horizontal > .el-menu-item,
+.topmenu-container.el-menu--horizontal > .el-submenu .el-submenu__title {
+  height: 80px;
+  line-height: 80px;
 }
 
 .topmenu-container.el-menu--horizontal > .el-menu-item.is-active,
 .el-menu--horizontal > .el-submenu.is-active .el-submenu__title {
-  border-bottom: 2px solid #{'var(--theme)'} !important;
-  color: #303133;
-}
-
-/* submenu item */
-.topmenu-container.el-menu--horizontal > .el-submenu .el-submenu__title {
-  float: left;
-  height: 50px !important;
-  line-height: 50px !important;
-  color: #999093 !important;
-  padding: 0 5px !important;
-  margin: 0 10px !important;
+  color: #fff;
+  background: hsla(0, 0%, 100%, 0.247) !important;
+  border-bottom: 4px solid #fff !important;
+  // border-bottom: 2px solid #{'var(--theme)'} !important;
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    margin: auto;
+    border-width: 8px;
+    border-style: solid;
+    border-color: transparent #fff transparent transparent;
+    transform: rotate(90deg);
+  }
 }
 </style>

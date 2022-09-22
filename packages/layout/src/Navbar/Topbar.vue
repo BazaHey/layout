@@ -1,11 +1,11 @@
 <template>
-  <el-scrollbar :class="sideTheme" wrap-class="scrollbar-wrapper__x scrollbar-wrapper__y">
+  <el-scrollbar wrap-class="scrollbar-wrapper__x scrollbar-wrapper__y">
     <el-menu
       :default-active="activeMenu"
-      :background-color="sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground"
-      :text-color="sideTheme === 'theme-dark' ? variables.menuColor : variables.menuLightColor"
+      :background-color="theme"
+      :text-color="textColor"
       :unique-opened="true"
-      :active-text-color="theme"
+      :active-text-color="textColor"
       :collapse-transition="false"
       mode="horizontal"
     >
@@ -21,8 +21,8 @@
 </template>
 
 <script>
+import { getGrayReversedColor } from '../utils';
 import TopbarItem from './TopbarItem';
-import variables from '../styles/variables.module.scss';
 
 export default {
   name: 'TopBar',
@@ -36,16 +36,15 @@ export default {
       type: String,
       default: '#409EFF',
     },
-    sideTheme: {
-      type: String,
-      default: 'theme-dark',
-    },
     menuRoutes: {
       type: Array,
       default: () => [],
     },
   },
   computed: {
+    textColor() {
+      return getGrayReversedColor(this.theme);
+    },
     activeMenu() {
       const route = this.$route;
       const { meta, path } = route;
@@ -54,9 +53,6 @@ export default {
         return meta.activeMenu;
       }
       return path;
-    },
-    variables() {
-      return variables;
     },
   },
 };
@@ -67,5 +63,10 @@ export default {
   ul > a {
     float: left;
   }
+}
+.topmenu-container .el-menu--horizontal > .el-menu-item,
+.topmenu-container .el-menu--horizontal > .el-submenu .el-submenu__title {
+  height: 80px;
+  line-height: 80px;
 }
 </style>

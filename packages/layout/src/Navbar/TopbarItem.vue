@@ -2,9 +2,10 @@
   <fragment v-if="!item.hidden">
     <template
       v-if="
-        hasOneShowingChild(item.children, item) &&
-        (!onlyOneChild.children || onlyOneChild.noShowingChildren) &&
-        !item.alwaysShow
+        (hasOneShowingChild(item.children, item) &&
+          (!onlyOneChild.children || onlyOneChild.noShowingChildren) &&
+          !item.alwaysShow) ||
+        item.menuType === 'C'
       "
     >
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path, onlyOneChild.query)">
@@ -16,7 +17,9 @@
 
     <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
       <template slot="title">
-        <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
+        <div class="box">
+          <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
+        </div>
       </template>
       <topbar-item
         v-for="child in item.children"

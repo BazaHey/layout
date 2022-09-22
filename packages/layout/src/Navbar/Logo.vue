@@ -1,6 +1,5 @@
 <script>
-import variables from '../styles/variables.module.scss';
-
+import { getGrayReversedColor } from '../utils';
 export default {
   name: 'NavbarLogo',
   inject: ['app'],
@@ -9,23 +8,18 @@ export default {
       type: String,
       default: '',
     },
-    sideTheme: {
+    theme: {
       type: String,
-      default: 'theme-dark',
+      default: '#409EFF',
     },
   },
   data() {
     return {};
   },
   render() {
-    const { logoTitle, sideTheme } = this;
-
-    const style = {
-      backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground,
-    };
-    const titleStyle = {
-      color: sideTheme === 'theme-dark' ? variables.logoTitleColor : variables.logoLightTitleColor,
-    };
+    const { logoTitle, theme } = this;
+    const style = { backgroundColor: theme };
+    const titleStyle = { color: getGrayReversedColor(theme) };
 
     const logo = this.app.$slots.logo;
 

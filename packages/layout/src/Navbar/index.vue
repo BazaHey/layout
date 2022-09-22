@@ -3,7 +3,7 @@ import Logo from './Logo.vue';
 import Topbar from './Topbar.vue';
 import Mixbar from './Mixbar.vue';
 import Breadcrumb from '../Breadcrumb';
-import variables from '../styles/variables.module.scss';
+import { getGrayReversedColor } from '../utils';
 
 export default {
   name: 'NavBar',
@@ -41,23 +41,23 @@ export default {
     const { logoTitle, settings, headerHeight, menuRoutes } = this;
     const { sideTheme, theme, navMode, autoMenu, showLogo } = settings;
     const rightMenu = this.app.$slots.rightMenu;
+    const color = getGrayReversedColor(theme);
 
     return (
       <header
         class={{ header: true, 'has-logo': showLogo && navMode !== 'side' }}
         style={{
           height: Number.isInteger(headerHeight) ? `${headerHeight}px` : 0,
-          color: sideTheme === 'theme-dark' ? variables.menuLightBackground : variables.menuBackground,
-          backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground,
+          color,
+          backgroundColor: theme,
         }}
       >
-        {navMode !== 'side' && showLogo && <logo logoTitle={logoTitle} sideTheme={sideTheme} />}
+        {navMode !== 'side' && showLogo && <logo logoTitle={logoTitle} theme={theme} />}
         {navMode === 'top' && (
           <topbar sideTheme={sideTheme} theme={theme} menuRoutes={menuRoutes} class="topmenu-container" />
         )}
         {navMode === 'mix' && autoMenu && (
           <mixbar
-            sideTheme={sideTheme}
             theme={theme}
             menuRoutes={menuRoutes}
             vOn:setSidebarRoutes={this.setSidebarRoutes}
