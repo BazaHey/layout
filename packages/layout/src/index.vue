@@ -43,7 +43,7 @@
         class="header-placeholder"
         :style="{ height: settings.fixedHeader || settings.navMode === 'mix' ? `${headerHeight}px` : 0 }"
       ></header>
-      <tags-view v-if="settings.showTagsView" ref="tagsView" />
+      <slot name="tagsView"></slot>
       <app-main :tagsView="tagsView" />
     </div>
     <right-panel :showSettings="settings.showSettings" @changeSetting="handleSetting">
@@ -75,7 +75,6 @@
 import AppMain from './AppMain.vue';
 import Navbar from './Navbar/index.vue';
 import Sidebar from './Sidebar';
-import TagsView from './TagsView';
 import RightPanel from './RightPanel';
 import Settings from './Settings';
 import Hamburger from './Hamburger';
@@ -105,7 +104,6 @@ export default {
     Sidebar,
     RightPanel,
     Settings,
-    TagsView,
     Hamburger,
   },
   provide() {
@@ -135,6 +133,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    tagsView: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
@@ -142,12 +144,6 @@ export default {
       sidebar: {
         opened: true,
         widthoutAnimation: true,
-      },
-      // 标签
-      tagsView: {
-        visitedViews: [],
-        cachedViews: [],
-        iframeViews: [],
       },
       // 路由菜单
       sidebarRoutes: [],
@@ -192,11 +188,6 @@ export default {
       if (this.device === 'mobile' && this.sidebar.opened) {
         this.closeSidebar({ withoutAnimation: false });
       }
-      const { name } = route;
-      if (name) {
-        this.addVisitedView(route);
-        this.addCacheView(route);
-      }
     },
     menuRoutes: {
       handler(val) {
@@ -237,120 +228,6 @@ export default {
     handleSetting(obj) {
       this.$emit('changeSetting', obj);
     },
-    // 添加访问过的view by yut 20220919
-    addVisitedView(view) {
-      if (this.tagsView.visitedViews.some((v) => v.path === view.path)) return;
-      const activeName = ['AddAndEditInitRules'];
-      if (activeName.includes(view.name)) {
-        this.tagsView.visitedViews.push(
-          Object.assign({}, view, {
-            title: view.query.navTitle || 'no-name',
-          }),
-        );
-      } else {
-        this.tagsView.visitedViews.push(
-          Object.assign({}, view, {
-            title: view.meta.title || 'no-name',
-          }),
-        );
-      }
-    },
-    // 缓存view by yut 20220919
-    addCacheView(view) {
-      if (this.tagsView.cachedViews.includes(view.name)) return;
-      if (view.meta && !view.meta.noCache) {
-        this.tagsView.cachedViews.push(view.name);
-      }
-    },
-    // 更新view视图 by yut 20220919
-    updateVisitedView(view) {
-      for (let v of this.tagsView.visitedViews) {
-        if (v.path === view.path) {
-          const activeName = ['AddAndEditInitRules'];
-          if (activeName.includes(view.name)) {
-            v = Object.assign(v, view, {
-              title: view.query.navTitle || 'no-name',
-            });
-          } else {
-            v = Object.assign(v, view);
-          }
-          break;
-        }
-      }
-    },
-    //  删除右侧view视图 by yut 20220919
-    delRightTags(view) {
-      const index = this.tagsView.visitedViews.findIndex((v) => v.path === view.path);
-      if (index === -1) {
-        return;
-      }
-      this.tagsView.visitedViews = this.tagsView.visitedViews.filter((item, idx) => {
-        if (idx <= index || (item.meta && item.meta.affix)) {
-          return true;
-        }
-        const i = this.tagsView.cachedViews.indexOf(item.name);
-        if (i > -1) {
-          this.tagsView.cachedViews.splice(i, 1);
-        }
-        return false;
-      });
-    },
-    // 删除左侧view视图 by yut 20220919
-    delLeftTags(view) {
-      const index = this.tagsView.visitedViews.findIndex((v) => v.path === view.path);
-      if (index === -1) {
-        return;
-      }
-      this.tagsView.visitedViews = this.tagsView.visitedViews.filter((item, idx) => {
-        if (idx >= index || (item.meta && item.meta.affix)) {
-          return true;
-        }
-        const i = this.tagsView.cachedViews.indexOf(item.name);
-        if (i > -1) {
-          this.tagsView.cachedViews.splice(i, 1);
-        }
-        return false;
-      });
-    },
-    // 删除tag视图
-    delView(view) {
-      for (const [i, v] of this.tagsView.visitedViews.entries()) {
-        if (v.path === view.path) {
-          this.tagsView.visitedViews.splice(i, 1);
-          break;
-        }
-      }
-    },
-    // 删除缓存的视图
-    delCachedView(view) {
-      const index = this.tagsView.cachedViews.indexOf(view.name);
-      index > -1 && this.tagsView.cachedViews.splice(index, 1);
-    },
-    // 删除访问过的views
-    delOthersVisitedViews(view) {
-      this.tagsView.visitedViews = this.tagsView.visitedViews.filter((v) => {
-        return v.meta.affix || v.path === view.path;
-      });
-    },
-    // 删除缓存过的views
-    delOthersCachedViews(view) {
-      const index = this.tagsView.cachedViews.indexOf(view.name);
-      if (index > -1) {
-        this.tagsView.cachedViews = this.tagsView.cachedViews.slice(index, index + 1);
-      } else {
-        this.tagsView.cachedViews = [];
-      }
-    },
-    // 关闭所有标签
-    delAllVisitedViews() {
-      // keep affix tags
-      const affixTags = this.tagsView.visitedViews.filter((tag) => tag.meta.affix);
-      this.tagsView.visitedViews = affixTags;
-    },
-    // 关闭所有缓存标签
-    delAllCachedViews() {
-      this.tagsView.cachedViews = [];
-    },
     handleClickOutside() {
       this.closeSidebar({ withoutAnimation: false });
     },
@@ -376,43 +253,12 @@ export default {
     window.addEventListener('resize', this.$_resizeHandler);
   },
   mounted() {
-    const self = this;
     const isMobile = this.$_isMobile();
     if (isMobile) {
       this.$emit('onDevice', 'mobile');
 
       this.closeSidebar({ withoutAnimation: true });
     }
-
-    this.$nextTick(() => {
-      this.$eventBus_base.$on('delView', function (obj) {
-        self.delView(obj);
-        self.delCachedView(obj);
-        self.$refs.tagsView.toLastView(self.tagsView.visitedViews, obj);
-      });
-      this.$eventBus_base.$on('delCachedView', function (obj) {
-        const { path, query } = obj;
-        self.$router.replace({
-          path: '/redirect' + path,
-          query,
-        });
-      });
-      this.$eventBus_base.$on('delRightTags', function (obj) {
-        self.delRightTags(obj);
-      });
-      this.$eventBus_base.$on('delLeftTags', function (obj) {
-        self.delLeftTags(obj);
-      });
-      this.$eventBus_base.$on('delOthersVisitedViews', function (obj) {
-        self.delOthersVisitedViews(obj);
-        self.delOthersCachedViews(obj);
-        self.$refs.tagsView.moveToCurrentTag();
-      });
-      this.$eventBus_base.$on('delAllViews', function (obj) {
-        self.delAllVisitedViews(obj);
-        self.delAllCachedViews(obj);
-      });
-    });
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.$_resizeHandler);

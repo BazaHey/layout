@@ -4,7 +4,6 @@ import iframeToggle from './IframeToggle/index';
 export default {
   name: 'AppMain',
   components: { iframeToggle },
-  inject: ['app'],
   props: {
     tagsView: {
       type: Object,
@@ -12,9 +11,8 @@ export default {
     },
   },
   render() {
-    const { cachedViews } = this.tagsView;
+    const { cachedViews, iframeViews } = this.tagsView;
     const key = this.$route.path;
-    // const defaultSlot = this.app.$slots.default;
 
     return (
       <section class="app-main">
@@ -23,7 +21,7 @@ export default {
             <router-view key={key} />
           </keep-alive>
         </transition>
-        <iframe-toggle />
+        <iframe-toggle iframeViews={iframeViews} />
       </section>
     );
   },

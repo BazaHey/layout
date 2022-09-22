@@ -8,9 +8,5 @@
 import Layout from './src/index.vue';
 import ParentView from './src/ParentView';
 import InnerLink from './src/InnerLink';
-import tab from './src/plugins/tab';
-import Vue from 'vue';
-import eventBus from './src/plugins/eventBus_base';
-Vue.prototype.$eventBus_base = eventBus;
 export default Layout;
-export { ParentView, InnerLink, tab };
+export { ParentView, InnerLink };

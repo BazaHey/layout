@@ -16,11 +16,14 @@ import InnerLink from '../InnerLink/index';
 export default {
   name: 'IframeToggle',
   components: { InnerLink },
-  inject: ['app'],
-  computed: {
-    iframeViews() {
-      return this.app.tagsView?.iframeViews || [];
+  props: {
+    iframeViews: {
+      type: Array,
+      default: () => [],
     },
+  },
+  data() {
+    return {};
   },
 };
 </script>
