@@ -10,7 +10,7 @@
       mode="horizontal"
     >
       <topbar-item
-        v-for="(route, index) in topbarRoutes"
+        v-for="(route, index) in menuRoutes"
         :key="route.path + index"
         :item="route"
         :base-path="route.path"
@@ -40,7 +40,7 @@ export default {
       type: String,
       default: 'theme-dark',
     },
-    topbarRoutes: {
+    menuRoutes: {
       type: Array,
       default: () => [],
     },

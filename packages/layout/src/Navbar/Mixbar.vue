@@ -1,7 +1,13 @@
 <template>
   <div>
-    <el-menu :default-active="activeMenu" mode="horizontal" @select="handleSelect">
-      <template v-for="(item, index) in topMenus">
+    <el-menu
+      :default-active="activeMenu"
+      :background-color="sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground"
+      :text-color="sideTheme === 'theme-dark' ? variables.menuColor : variables.menuLightColor"
+      mode="horizontal"
+      @select="handleSelect"
+    >
+      <template v-for="(item, index) in mixMenus">
         <el-menu-item v-if="index < visibleNumber" :key="index" :index="item.path" :style="{ '--theme': theme }">
           <svg-icon :icon-class="item.meta?.icon || ''" />
           {{ item.meta?.title }}
@@ -9,9 +15,9 @@
       </template>
 
       <!-- 顶部菜单超出数量折叠 -->
-      <el-submenu v-if="topMenus.length > visibleNumber" :style="{ '--theme': theme }" index="more">
+      <el-submenu v-if="mixMenus.length > visibleNumber" :style="{ '--theme': theme }" index="more">
         <template slot="title">更多菜单</template>
-        <template v-for="(item, index) in topMenus">
+        <template v-for="(item, index) in mixMenus">
           <el-menu-item v-if="index >= visibleNumber" :key="index" :index="item.path">
             <svg-icon :icon-class="item.meta?.icon || ''" />
             {{ item.meta?.title }}
@@ -23,21 +29,22 @@
 </template>
 
 <script>
+import variables from '../styles/variables.module.scss';
 // 隐藏侧边栏路由
 const hideList = ['/index', '/user/profile'];
 
 export default {
   name: 'MixNav',
   props: {
+    sideTheme: {
+      type: String,
+      default: '#409EFF',
+    },
     theme: {
       type: String,
       default: '#409EFF',
     },
-    constantRoutes: {
-      type: Array,
-      default: () => [],
-    },
-    topbarRoutes: {
+    menuRoutes: {
       type: Array,
       default: () => [],
     },
@@ -51,30 +58,28 @@ export default {
     };
   },
   computed: {
+    variables() {
+      return variables;
+    },
     // 顶部显示菜单
-    topMenus() {
-      const topMenus = [];
-      this.routers.map((menu) => {
+    mixMenus() {
+      const mixMenus = [];
+      this.menuRoutes.forEach((menu) => {
         if (menu.hidden !== true) {
           // 兼容顶部栏一级菜单内部跳转
           if (menu.path === '/') {
-            topMenus.push(menu.children[0]);
+            mixMenus.push(menu.children[0]);
           } else {
-            topMenus.push(menu);
+            mixMenus.push(menu);
           }
         }
-        return undefined;
       });
-      return topMenus;
-    },
-    // 所有的路由信息
-    routers() {
-      return this.topbarRoutes;
+      return mixMenus;
     },
     // 设置子路由
     childrenMenus() {
       const childrenMenus = [];
-      this.routers.map((router) => {
+      this.menuRoutes.map((router) => {
         for (const item in router.children) {
           if (router.children[item].parentPath === undefined) {
             if (router.path === '/') {
@@ -90,7 +95,7 @@ export default {
         }
         return undefined;
       });
-      return this.constantRoutes.concat(childrenMenus);
+      return childrenMenus;
     },
     // 默认激活的菜单
     activeMenu() {
@@ -99,10 +104,8 @@ export default {
       if (path !== undefined && path.lastIndexOf('/') > 0 && hideList.indexOf(path) === -1) {
         const tmpPath = path.substring(1, path.length);
         activePath = '/' + tmpPath.substring(0, tmpPath.indexOf('/'));
-        this.$emit('toggleSidebarHide', false);
       } else if (!this.children) {
         activePath = path;
-        this.$emit('toggleSidebarHide', true);
       }
       this.activeRoutes(activePath);
       return activePath;
@@ -126,18 +129,16 @@ export default {
     // 菜单选择事件
     handleSelect(key, keyPath) {
       this.currentIndex = key;
-      const route = this.routers.find((item) => item.path === key);
+      const route = this.menuRoutes.find((item) => item.path === key);
       if (this.ishttp(key)) {
         // http(s):// 路径新窗口打开
         window.open(key, '_blank');
       } else if (!route || !route.children) {
         // 没有子路由路径内部打开
         this.$router.push({ path: key });
-        this.$emit('toggleSidebarHide', true);
       } else {
         // 显示左侧联动菜单
         this.activeRoutes(key);
-        this.$emit('toggleSidebarHide', false);
       }
     },
     // 当前激活的路由

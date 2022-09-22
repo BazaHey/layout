@@ -1,12 +1,8 @@
 <script>
-import { Fragment } from 'vue-fragment';
 import variables from '../styles/variables.module.scss';
 
 export default {
   name: 'SidebarLogo',
-  components: {
-    Fragment,
-  },
   inject: ['app'],
   props: {
     logoTitle: {
@@ -49,7 +45,7 @@ export default {
     return (
       <div class={className} style={style}>
         <router-link class="sidebar-logo-link" to="/">
-          <fragment>{logo}</fragment>
+          {logo}
           {!collapse && (
             <h1 class="sidebar-title" style={titleStyle}>
               {logoTitle}

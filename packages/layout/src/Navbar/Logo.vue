@@ -1,12 +1,8 @@
 <script>
-import { Fragment } from 'vue-fragment';
 import variables from '../styles/variables.module.scss';
 
 export default {
   name: 'NavbarLogo',
-  components: {
-    Fragment,
-  },
   inject: ['app'],
   props: {
     logoTitle: {
@@ -36,7 +32,7 @@ export default {
     return (
       <div class="navbar-logo-container" style={style}>
         <router-link class="navbar-logo-link" to="/">
-          <fragment>{logo}</fragment>
+          {logo}
           <h1 class="navbar-title" style={titleStyle}>
             {logoTitle}
           </h1>

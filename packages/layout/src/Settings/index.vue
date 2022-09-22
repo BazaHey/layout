@@ -123,8 +123,30 @@ export default {
       });
 
       if (key === 'navMode' && (value === 'top' || value === 'mix')) {
-        this.$emit('toggleSidebarHide', false);
-        this.$emit('resetSidebarRoutes');
+        switch (value) {
+          case 'side':
+            this.$emit('setSidebarRoutes');
+            if (this.settings.autoMenu) {
+              this.$emit('changeSetting', {
+                key: 'autoMenu',
+                value: false,
+              });
+            }
+            break;
+          case 'top':
+            if (this.settings.autoMenu) {
+              this.$emit('changeSetting', {
+                key: 'autoMenu',
+                value: false,
+              });
+            }
+            break;
+          case 'mix':
+            this.$emit('setSidebarRoutes');
+            break;
+          default:
+            break;
+        }
       }
     },
     handleFixedHeader(val) {
@@ -144,6 +166,7 @@ export default {
         key: 'autoMenu',
         value: val,
       });
+      // TODO 记住当前点击的路由
     },
     handleShowHeader(val) {
       this.$emit('changeSetting', {

@@ -22,38 +22,26 @@
       :style="{ paddingTop: settings.navMode === 'mix' ? `${headerHeight}px` : 0 }"
     ></div>
 
-    <div :class="{ hasTagsView: settings.showTagsView, fixedHeader: settings.fixedHeader }" class="main-container">
+    <div :class="{ fixedHeader: settings.fixedHeader }" class="main-container">
       <navbar
-        v-show="settings.showHeader"
+        v-if="settings.showHeader"
         :class="{ header__fixed: settings.fixedHeader || settings.navMode === 'mix' }"
-        :sidebarOpened="sidebar.opened"
-        :sideTheme="settings.sideTheme"
-        :theme="settings.theme"
-        :navMode="settings.navMode"
+        :settings="settings"
         :logoTitle="logoTitle"
-        :showLogo="settings.showLogo"
-        :topbarRoutes="topbarRoutes"
+        :menuRoutes="menuRoutes"
         :headerHeight="headerHeight"
-        @toggleSidebarHide="toggleSidebarHide"
         @setSidebarRoutes="setSidebarRoutes"
       />
       <header
         v-if="(settings.fixedHeader || settings.navMode === 'mix') && settings.showHeader"
-        v-show="(settings.fixedHeader || settings.navMode === 'mix') && settings.showHeader"
         class="header-placeholder"
         :style="{ height: settings.fixedHeader || settings.navMode === 'mix' ? `${headerHeight}px` : 0 }"
       ></header>
-      <slot name="tagsView"></slot>
+      <slot v-if="settings.showTagsView" name="tagsView"></slot>
       <app-main :tagsView="tagsView" />
     </div>
     <right-panel :showSettings="settings.showSettings" @changeSetting="handleSetting">
-      <settings
-        :settings="settings"
-        @changeSetting="handleSetting"
-        @toggleSidebarHide="toggleSidebarHide"
-        @setSidebarRoutes="setSidebarRoutes"
-        @resetSidebarRoutes="resetSidebarRoutes"
-      />
+      <settings :settings="settings" @changeSetting="handleSetting" @setSidebarRoutes="setSidebarRoutes" />
     </right-panel>
 
     <!-- 隐藏顶部时 -->
@@ -140,14 +128,12 @@ export default {
   },
   data() {
     return {
+      sidebarRoutes: [],
       // 侧边栏
       sidebar: {
         opened: true,
         widthoutAnimation: true,
       },
-      // 路由菜单
-      sidebarRoutes: [],
-      topbarRoutes: [],
     };
   },
   computed: {
@@ -189,14 +175,6 @@ export default {
         this.closeSidebar({ withoutAnimation: false });
       }
     },
-    menuRoutes: {
-      handler(val) {
-        this.sidebarRoutes = val;
-        this.topbarRoutes = JSON.parse(JSON.stringify(this.sidebarRoutes));
-        this.defaultRoutes = JSON.parse(JSON.stringify(this.sidebarRoutes));
-      },
-      deep: true,
-    },
   },
   methods: {
     // 侧边栏相关方法
@@ -216,10 +194,14 @@ export default {
       this.$emit('changeSetting', { showSide: status });
     },
     setSidebarRoutes(routes) {
-      this.sidebarRoutes = routes;
-    },
-    resetSidebarRoutes() {
-      this.sidebarRoutes = this.defaultRoutes;
+      // 如果没有路由信息，就使用默认的全部。
+      // 当模式为 mix 时，启用自动分割菜单的话，把非一级菜单设置为左侧菜单列。
+      if (Array.isArray(routes)) {
+        this.sidebarRoutes = routes;
+      } else {
+        // 当模式为 side，mix但不为自动分割菜单的话，使用所有。
+        this.sidebarRoutes = this.menuRoutes;
+      }
     },
     handleClick() {
       this.$emit('changeSetting', { key: 'showSettings', value: true });

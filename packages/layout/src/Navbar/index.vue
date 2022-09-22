@@ -1,5 +1,4 @@
 <script>
-import { Fragment } from 'vue-fragment';
 import Logo from './Logo.vue';
 import Topbar from './Topbar.vue';
 import Mixbar from './Mixbar.vue';
@@ -13,25 +12,12 @@ export default {
     Topbar,
     Mixbar,
     Breadcrumb,
-    Fragment,
   },
   inject: ['app'],
   props: {
-    sidebarOpened: {
-      type: Boolean,
-      default: true,
-    },
-    sideTheme: {
-      type: String,
-      default: 'theme-dark',
-    },
-    theme: {
-      type: String,
-      default: '#409EFF',
-    },
-    navMode: {
-      type: String,
-      default: 'mix',
+    settings: {
+      type: Object,
+      default: () => {},
     },
     logoTitle: {
       type: String,
@@ -41,25 +27,19 @@ export default {
       type: Number,
       default: 80,
     },
-    showLogo: {
-      type: Boolean,
-      default: false,
-    },
-    topbarRoutes: {
+    menuRoutes: {
       type: Array,
       default: () => [],
     },
   },
   methods: {
-    toggleSidebarHide(value) {
-      this.$emit('toggleSidebarHide', value);
-    },
     setSidebarRoutes(routes) {
       this.$emit('setSidebarRoutes', routes);
     },
   },
   render() {
-    const { logoTitle, sideTheme, theme, navMode, showLogo, headerHeight, topbarRoutes } = this;
+    const { logoTitle, settings, headerHeight, menuRoutes } = this;
+    const { sideTheme, theme, navMode, autoMenu, showLogo } = settings;
     const rightMenu = this.app.$slots.rightMenu;
 
     return (
@@ -67,25 +47,25 @@ export default {
         class={{ header: true, 'has-logo': showLogo && navMode !== 'side' }}
         style={{
           height: Number.isInteger(headerHeight) ? `${headerHeight}px` : 0,
+          color: sideTheme === 'theme-dark' ? variables.menuLightBackground : variables.menuBackground,
           backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground,
         }}
       >
         {navMode !== 'side' && showLogo && <logo logoTitle={logoTitle} sideTheme={sideTheme} />}
         {navMode === 'top' && (
-          <topbar sideTheme={sideTheme} theme={theme} topbarRoutes={topbarRoutes} class="topmenu-container" />
+          <topbar sideTheme={sideTheme} theme={theme} menuRoutes={menuRoutes} class="topmenu-container" />
         )}
-        {navMode === 'mix' && (
+        {navMode === 'mix' && autoMenu && (
           <mixbar
             sideTheme={sideTheme}
             theme={theme}
-            topbarRoutes={topbarRoutes}
-            vOn:toggleSidebarHide={this.toggleSidebarHide}
+            menuRoutes={menuRoutes}
             vOn:setSidebarRoutes={this.setSidebarRoutes}
             class="topmenu-container"
           />
         )}
         {navMode === 'side' && <breadcrumb class="breadcrumb-container" />}
-        <fragment>{rightMenu}</fragment>
+        {rightMenu}
       </header>
     );
   },
