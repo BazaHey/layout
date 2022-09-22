@@ -14,12 +14,12 @@
       @toggleSidebar="toggleSidebar"
       class="sidebar-container"
       :class="{ 'sidebar-container-fixed': settings.fixedSide }"
-      :style="{ paddingTop: settings.navMode === 'mix' ? headerHeight : 0 }"
+      :style="{ paddingTop: settings.navMode === 'mix' ? `${headerHeight}px` : 0 }"
     />
     <div
       v-show="settings.fixedSide && showSide"
       class="sidebar-container-placeholder"
-      :style="{ paddingTop: settings.navMode === 'mix' ? headerHeight : 0 }"
+      :style="{ paddingTop: settings.navMode === 'mix' ? `${headerHeight}px` : 0 }"
     ></div>
 
     <div :class="{ hasTagsView: settings.showTagsView, fixedHeader: settings.fixedHeader }" class="main-container">
