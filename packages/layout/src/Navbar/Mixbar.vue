@@ -11,8 +11,8 @@
       <template v-for="(item, index) in mixMenus">
         <el-menu-item v-if="index < visibleNumber" :key="index" :index="item.path" :style="{ '--theme': theme }">
           <div class="box">
-            <svg-icon :icon-class="item.meta?.icon || ''" class-name="icon" />
-            <span class="title">{{ item.meta?.title }}</span>
+            <svg-icon :icon-class="item?.meta?.icon || ''" class-name="icon" />
+            <span class="title">{{ item?.meta?.title }}</span>
           </div>
         </el-menu-item>
       </template>
@@ -31,8 +31,8 @@
         </template>
         <template v-for="(item, index) in mixMenus">
           <el-menu-item v-if="index >= visibleNumber" :key="index" :index="item.path">
-            <svg-icon :icon-class="item.meta?.icon || ''" />
-            {{ item.meta?.title }}
+            <svg-icon :icon-class="item?.meta?.icon || ''" />
+            {{ item?.meta?.title }}
           </el-menu-item>
         </template>
       </el-submenu>

@@ -39,7 +39,7 @@ export default {
   },
   render() {
     const { logoTitle, settings, headerHeight, menuRoutes } = this;
-    const { sideTheme, theme, navMode, autoMenu, showLogo } = settings;
+    const { theme, navMode, autoMenu, showLogo } = settings;
     const rightMenu = this.app.$slots.rightMenu;
     const color = getGrayReversedColor(theme);
 
@@ -53,9 +53,7 @@ export default {
         }}
       >
         {navMode !== 'side' && showLogo && <logo logoTitle={logoTitle} theme={theme} />}
-        {navMode === 'top' && (
-          <topbar sideTheme={sideTheme} theme={theme} menuRoutes={menuRoutes} class="topmenu-container" />
-        )}
+        {navMode === 'top' && <topbar theme={theme} menuRoutes={menuRoutes} class="topmenu-container" />}
         {navMode === 'mix' && autoMenu && (
           <mixbar
             theme={theme}

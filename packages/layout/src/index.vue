@@ -66,7 +66,6 @@ import Sidebar from './Sidebar';
 import RightPanel from './RightPanel';
 import Settings from './Settings';
 import Hamburger from './Hamburger';
-import variables from './styles/variables.module.scss';
 
 import './styles/sidebar.scss';
 
@@ -128,7 +127,7 @@ export default {
   },
   data() {
     return {
-      sidebarRoutes: [],
+      sidebarRoutes: this.menuRoutes,
       // 侧边栏
       sidebar: {
         opened: true,
@@ -149,9 +148,6 @@ export default {
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile',
       };
-    },
-    variables() {
-      return variables;
     },
     showSide() {
       if (this.settings.showSide === false) {
